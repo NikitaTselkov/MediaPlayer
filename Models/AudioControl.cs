@@ -1,12 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-
+using System.Linq;
+using System.Windows.Media;
 
 namespace Models
 {
     public partial class AudioControl
     {
+        #region Props
+
+        /// <summary>
+        /// Текущее аудио.
+        /// </summary>
+        private Audio CurrentAudio => playlist[currentIndex];
+
+        /// <summary>
+        /// Плейлист.
+        /// </summary>
+        private string[] Playlist => playlist.Select((a) => a.Name).ToArray();
+
+        /// <summary>
+        /// Громкость воспроизведения.
+        /// </summary>
+        public double Volume 
+        {
+            get { return mediaPlayer.Volume; }
+            set { mediaPlayer.Volume = value; }
+        }
+
+        /// <summary>
+        /// Прогресс воспроизведения.
+        /// </summary>
+        public double Position
+        {
+            get { return mediaPlayer.Position.TotalSeconds; }
+            set { mediaPlayer.Position = TimeSpan.FromSeconds(value); }
+        }
+
+        /// <summary>
+        /// Длительность аудио в секундах.
+        /// </summary>
+        public double Duration => CurrentAudio.Duration;
+
+        #endregion
+
+
         /// <summary>
         /// Метод начинающий воспроизведение.
         /// </summary>
@@ -31,13 +70,15 @@ namespace Models
            Stop();
         }
 
+        /// <summary>
+        /// Метод устанавливающий песню.
+        /// </summary>
+        /// <param name="path"> Путь к песне. </param>
         public void SetSong(string path)
         {
             LoadAudio(path);
             SelectAudio(0);
         }
-
-
 
     }
 }

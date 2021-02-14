@@ -3,135 +3,33 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using WMPLib;
+using System.Windows.Media;
+
 
 namespace Models
 {
-    public enum Status
-    {
-        Undefined,
-        Stopped,
-        Paused,
-        Playing,
-        Ended,
-        Transitioning,
-        Ready
-    }
-
     public partial class AudioControl
-    {
-        private readonly WindowsMediaPlayer wmp;
-        private readonly Timer timer;
+    {    
+        private readonly MediaPlayer mediaPlayer;
         private readonly List<Audio> playlist;
+        private Timer timer;
         private int currentIndex;
-
-        #region Props
-
-        /// <summary>
-        /// Текущее аудио
-        /// </summary>
-        public Audio CurrentAudio => playlist[currentIndex];
-
-        /// <summary>
-        /// Плейлист
-        /// </summary>
-        public string[] Playlist => playlist.Select((a) => a.Name).ToArray();
-
-        /// <summary>
-        /// Статус воспроизведения
-        /// </summary>
-        public Status PlayingStatus
-        {
-            get
-            {
-                switch (wmp.playState)
-                {
-                    case WMPPlayState.wmppsStopped:
-                        return Status.Stopped;
-                    case WMPPlayState.wmppsPaused:
-                        return Status.Paused;
-                    case WMPPlayState.wmppsPlaying:
-                        return Status.Playing;
-                    case WMPPlayState.wmppsMediaEnded:
-                        return Status.Ended;
-                    case WMPPlayState.wmppsTransitioning:
-                        return Status.Transitioning;
-                    case WMPPlayState.wmppsReady:
-                        return Status.Ready;
-                    default:
-                        return Status.Undefined;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Прогресс воспроизведения
-        /// </summary>
-        public double Position
-        {
-            get { return wmp.controls.currentPosition; }
-            set { wmp.controls.currentPosition = value; }
-        }
-
-        /// <summary>
-        /// Прогресс воспроизведения в формате TimeSpan
-        /// </summary>
-        public TimeSpan PositionTime => TimeSpan.FromSeconds((int)wmp.controls.currentPosition);
-
-        /// <summary>
-        /// Громкость воспроизведения
-        /// </summary>
-        public int Volume
-        {
-            get { return wmp.settings.volume; }
-            set { wmp.settings.volume = value; }
-        }
-
-        /// <summary>
-        /// Автоматическое переключение на следующее аудио
-        /// </summary>
-        public bool AutoNext { get; set; } = true;
-
-        /// <summary>
-        /// Автоматический повтор выбранного аудио
-        /// </summary>
-        public bool AutoRestart { get; set; }
-        #endregion
 
         public AudioControl()
         {
-            wmp = new WindowsMediaPlayer();
-            wmp.PlayStateChange += (e) =>
-            {
-                if (PlayingStatus == Status.Undefined)
-                    return;
-                PlayingStatusChanged?.Invoke(this, PlayingStatus);
-            };
-            timer = new Timer() { Interval = 17 };
-            timer.Tick += (s, e) =>
-            {
-                ProgressChanged?.Invoke(this, Position);
+            mediaPlayer = new MediaPlayer();
 
-                if (PlayingStatus == Status.Stopped || PlayingStatus == Status.Ended)
-                    ((Timer)s).Stop();
-
-                if ((PlayingStatus == Status.Stopped || PlayingStatus == Status.Ended) && AutoRestart)
-                {
-                    SelectAudio(currentIndex);
-                    return;
-                }
-
-                if ((PlayingStatus == Status.Stopped || PlayingStatus == Status.Ended) && AutoNext)
-                    SelectAudio(++currentIndex);
-            };
             playlist = new List<Audio>();
+
+            // Громкость по умолжанию.
+            Volume = 1;
         }
 
         /// <summary>
-        /// Метод выбора аудио в плейлисте
+        /// Метод выбора аудио в плейлисте.
         /// </summary>
-        /// <param name="index">Индекс аудио в плейлисте</param>
-        public void SelectAudio(int index)
+        /// <param name="index"> Индекс аудио в плейлисте. </param>
+        private void SelectAudio(int index)
         {
             currentIndex = index;
 
@@ -141,90 +39,88 @@ namespace Models
             if (currentIndex < 0)
                 currentIndex = playlist.Count - 1;
 
-            wmp.currentMedia = CurrentAudio.Media;
+            mediaPlayer.Open(new Uri(playlist[currentIndex].SourceUrl));
 
             ProgressChanged?.Invoke(this, Position);
             AudioSelected?.Invoke(this, CurrentAudio);
-            timer.Start();
+           // timer.Start();
         }
 
         /// <summary>
-        /// Метод добавления аудио в плейлист из файла
+        /// Метод добавления аудио в плейлист из файла.
         /// </summary>
-        /// <param name="filepath">Путь к аудиофайлу</param>
-        public void LoadAudio(string filepath) => playlist.Add(new Audio(wmp.newMedia(filepath)));
+        /// <param name="filepath"> Путь к аудиофайлу. </param> 
+        private void LoadAudio(string filepath) => playlist.Add(new Audio(filepath));
 
         /// <summary>
-        /// Метод добавления нескольких аудио в плейлист
+        /// Метод добавления нескольких аудио в плейлист.
         /// </summary>
-        /// <param name="filepaths">Массив путей к аудио файлам</param>
-        public void LoadAudio(params string[] filepaths)
+        /// <param name="filepaths"> Массив путей к аудио файлам. </param>
+        private void LoadAudio(params string[] filepaths)
         {
             foreach (var file in filepaths)
                 LoadAudio(file);
         }
 
         /// <summary>
-        /// Метод удаления аудио из плейлиста
+        /// Метод удаления аудио из плейлиста.
         /// </summary>
-        /// <param name="index"></param>
-        public void RemoveAudio(int index) => playlist.RemoveAt(index);
+        /// <param name="index"> Позиция удоляемого элемента. </param>
+        private void RemoveAudio(int index) => playlist.RemoveAt(index);
 
         /// <summary>
-        /// Метод удаления нескольких аудио из плейлиста
+        /// Метод удаления нескольких аудио из плейлиста.
         /// </summary>
-        /// <param name="index"></param>
-        public void RemoveAudio(params int[] indexes)
+        /// <param name="index"> Позиция удоляемых элементов. </param>
+        private void RemoveAudio(params int[] indexes)
         {
             foreach (var index in indexes)
                 RemoveAudio(index);
         }
 
         #region Controls
+
         /// <summary>
-        /// Воспроизвести аудио
+        /// Воспроизвести аудио.
         /// </summary>
-        public void Play()
+        private void Play()
         {
             if (Playlist.Length == 0)
                 return;
 
-            timer.Start();
-            wmp.controls.play();
+            mediaPlayer.Play();
         }
+
         /// <summary>
-        /// Приостановить аудио
+        /// Приостановить аудио.
         /// </summary>
-        public void Pause()
+        private void Pause()
         {
-            timer.Stop();
-            wmp.controls.pause();
+            mediaPlayer.Pause();
         }
+
         /// <summary>
-        /// Остановить аудио
+        /// Остановить аудио.
         /// </summary>
-        public void Stop()
+        private void Stop()
         {
-            timer.Stop();
-            wmp.controls.stop();
+            mediaPlayer.Stop();
         }
+
         #endregion
 
         #region Events
-        /// <summary>
-        /// Событие изменения статуса воспроизведения
-        /// </summary>
-        public event Action<object, Status> PlayingStatusChanged;
 
         /// <summary>
-        /// Событие изменения прогресса воспроизведения
+        /// Событие изменения прогресса воспроизведения.
         /// </summary>
         public event Action<object, double> ProgressChanged;
 
         /// <summary>
-        /// Событие выбора аудио из плейлиста
+        /// Событие выбора аудио из плейлиста.
         /// </summary>
-        public event Action<object, Audio> AudioSelected;
+        private event Action<object, Audio> AudioSelected;
+
         #endregion
     }
 }

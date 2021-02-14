@@ -4,17 +4,20 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MediaPlayer"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         mc:Ignorable="d"
         Title="MainWindow"
         Height="450"
         Width="800"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
-    
+
     <Grid>
 
-        <DockPanel HorizontalAlignment="Center">
+        <StackPanel VerticalAlignment="Center">
 
-            <Button
+            <DockPanel HorizontalAlignment="Center">
+
+                <Button
                 Command="{Binding Play}"
                 Width="100"
                 Height="50"
@@ -22,7 +25,7 @@
                 FontSize="25"
             />
 
-            <Button
+                <Button
                 Command="{Binding Stop}"
                 Width="100"
                 Height="50"
@@ -30,15 +33,34 @@
                 FontSize="25"
             />
 
-            <Button
+                <Button
                 Command="{Binding Pause}"
                 Width="100"
                 Height="50"
                 Content="pause"
                 FontSize="25"
             />
+
+            </DockPanel>
+
             
-        </DockPanel>
+
+            <Slider Minimum="0" Maximum="1.0"  Width="100" Margin="20" Value="{Binding Volume, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+
+            <Slider Margin="50" Minimum="0" Maximum="{Binding Duration}" Width="200" Value="{Binding Position, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="PreviewMouseDown">
+                        <i:InvokeCommandAction Command="{Binding Pause}"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="PreviewMouseUp">
+                        <i:InvokeCommandAction Command="{Binding Play}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Slider>
+
+            <Label Content="{Binding Position, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+
+        </StackPanel>
 
     </Grid>
 </Window>
