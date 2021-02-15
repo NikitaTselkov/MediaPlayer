@@ -43,7 +43,16 @@
 
             </DockPanel>
 
-            
+            <StackPanel Height="100">
+
+                <ListBox SelectedItem="{Binding CurrentSongName, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" x:Name="SongsList" Height="100" Background="Bisque" ItemsSource="{Binding Playlist}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction Command="{Binding SelectSong}" CommandParameter="{Binding ElementName=SongsList, Path=SelectedItem}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ListBox>
+            </StackPanel>
 
             <Slider Minimum="0" Maximum="1.0"  Width="100" Margin="20" Value="{Binding Volume, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 
@@ -61,7 +70,8 @@
             <Label Content="{Binding Position, UpdateSourceTrigger=PropertyChanged}" />
 
             <DockPanel HorizontalAlignment="Center">
-                <Button Height="30" Width="30" Margin="10" Content="back" Command="{Binding BackSong}" />
+                <Button x:Name="bt1" Height="30" Width="30" Margin="10" Content="back" Command="{Binding BackSong}">
+                </Button>
                 <Button Height="30" Width="30" Margin="10" Content="next" Command="{Binding NextSong}" />
             </DockPanel>
 

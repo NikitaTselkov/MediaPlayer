@@ -22,6 +22,8 @@ namespace ViewModels
 
         public RelayCommand BackSong { get; set; }
 
+        public RelayCommand SelectSong { get; set; }
+
         // Громкость.
         public double Volume
         {
@@ -44,8 +46,21 @@ namespace ViewModels
             }
         }
 
-        //Длительность аудио в секундах.
+        // Длительность аудио в секундах.
         public double Duration => audioControl.Duration;
+
+        // Название текущей песни.
+        public string CurrentSongName
+        {
+            get { return audioControl.CurrentAudio.Name; }
+            set
+            { 
+                RaisePropertyChanged(); 
+            }
+        }
+
+        // Плейлист.
+        public string[] Playlist => audioControl.Playlist;
 
 
         public MainViewModel()
@@ -59,6 +74,8 @@ namespace ViewModels
             NextSong = new RelayCommand(NextSongMethod);
 
             BackSong = new RelayCommand(BackSongMethod);
+
+            SelectSong = new RelayCommand(SelectSongMethod);
 
 
             audioControl.SetSong(@"C:\Users\nikit\Desktop\Bullfight.mp3");
@@ -85,14 +102,23 @@ namespace ViewModels
             audioControl.StopSong();
         }
 
+        public void SelectSongMethod(object param)
+        {
+            if (param == null) throw new ArgumentNullException();
+
+            audioControl.SelectSong(param);
+        }
+
         public void NextSongMethod(object param)
         {
             audioControl.SwitchSong(NextOrBack.Next);
+            CurrentSongName = CurrentSongName;
         }
 
         public void BackSongMethod(object param)
         {
             audioControl.SwitchSong(NextOrBack.Back);
+            CurrentSongName = CurrentSongName;
         }
 
         /// <summary>

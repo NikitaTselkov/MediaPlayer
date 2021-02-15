@@ -32,7 +32,7 @@ namespace Models
         {
             Media = new MediaPlayer();
             Media.Open(new Uri(path));
-            Name = Path.GetFileNameWithoutExtension(Media.Source.AbsoluteUri);
+            Name = Path.GetFileNameWithoutExtension(Media.Source.AbsoluteUri).Replace("%20", " ");
             SourceUrl = Media.Source.AbsoluteUri;
 
             GetDuration();

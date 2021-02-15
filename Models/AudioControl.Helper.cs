@@ -16,6 +16,7 @@ namespace Models
         private readonly MediaPlayer mediaPlayer;
         private readonly List<Audio> playlist;
         private int currentIndex;
+        private bool isSwitchSong;
 
         public AudioControl()
         {

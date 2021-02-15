@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Catel.Collections;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -13,12 +14,12 @@ namespace Models
         /// <summary>
         /// Текущее аудио.
         /// </summary>
-        private Audio CurrentAudio => playlist[currentIndex];
+        public Audio CurrentAudio => playlist[currentIndex];
 
         /// <summary>
         /// Плейлист.
         /// </summary>
-        private string[] Playlist => playlist.Select((a) => a.Name).ToArray();
+        public string[] Playlist => playlist.Select((a) => a.Name).ToArray();
 
         /// <summary>
         /// Громкость воспроизведения.
@@ -81,6 +82,28 @@ namespace Models
         }
 
         /// <summary>
+        /// Метод выбирающий песню.
+        /// </summary>
+        /// <param name="name"> Название песни. </param>
+        public void SelectSong(object name)
+        {
+            if (isSwitchSong == false)
+            {
+                if (name == null) throw new ArgumentNullException();
+
+                int index = Playlist.IndexOf(name, 0);
+
+                if (index == -1) throw new ArgumentNullException();
+
+                SelectAudio(index);
+            }
+            else
+            {
+                isSwitchSong = false;
+            }        
+        }
+
+        /// <summary>
         /// Метод переключающий песню.
         /// </summary>
         /// <param name="param"> Выбор в какую сторону переключать. </param>
@@ -94,6 +117,8 @@ namespace Models
             {
                 SelectAudio(currentIndex - 1);
             }
+
+            isSwitchSong = true;
         }
 
     }
