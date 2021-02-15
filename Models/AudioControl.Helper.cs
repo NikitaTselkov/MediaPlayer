@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Windows.Forms;
 using System.Windows.Media;
 
 
 namespace Models
 {
+    public enum NextOrBack
+    { 
+        Next,
+        Back
+    }
+
     public partial class AudioControl
     {    
         private readonly MediaPlayer mediaPlayer;
         private readonly List<Audio> playlist;
-        private Timer timer;
         private int currentIndex;
 
         public AudioControl()
@@ -43,7 +45,6 @@ namespace Models
 
             ProgressChanged?.Invoke(this, Position);
             AudioSelected?.Invoke(this, CurrentAudio);
-           // timer.Start();
         }
 
         /// <summary>

@@ -80,5 +80,21 @@ namespace Models
             SelectAudio(0);
         }
 
+        /// <summary>
+        /// Метод переключающий песню.
+        /// </summary>
+        /// <param name="param"> Выбор в какую сторону переключать. </param>
+        public void SwitchSong(NextOrBack param)
+        {
+            if (param == NextOrBack.Next)
+            {
+                SelectAudio(currentIndex + 1);
+            }
+            else
+            {
+                SelectAudio(currentIndex - 1);
+            }
+        }
+
     }
 }

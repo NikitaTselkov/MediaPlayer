@@ -18,6 +18,10 @@ namespace ViewModels
 
         public RelayCommand Stop { get; set; }
 
+        public RelayCommand NextSong { get; set; }
+
+        public RelayCommand BackSong { get; set; }
+
         // Громкость.
         public double Volume
         {
@@ -52,7 +56,16 @@ namespace ViewModels
 
             Stop = new RelayCommand(StopMethod);
 
+            NextSong = new RelayCommand(NextSongMethod);
+
+            BackSong = new RelayCommand(BackSongMethod);
+
+
             audioControl.SetSong(@"C:\Users\nikit\Desktop\Bullfight.mp3");
+
+            audioControl.SetSong(@"C:\Users\nikit\Desktop\Sometimes You're The Hammer, Sometimes You're The Nail.mp3");
+
+            audioControl.SetSong(@"C:\Users\nikit\Desktop\Sell Your Soul.mp3");
 
             UpdatePosition();
         }
@@ -70,6 +83,16 @@ namespace ViewModels
         public void StopMethod(object param)
         {
             audioControl.StopSong();
+        }
+
+        public void NextSongMethod(object param)
+        {
+            audioControl.SwitchSong(NextOrBack.Next);
+        }
+
+        public void BackSongMethod(object param)
+        {
+            audioControl.SwitchSong(NextOrBack.Back);
         }
 
         /// <summary>

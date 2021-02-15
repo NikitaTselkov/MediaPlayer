@@ -58,7 +58,13 @@
                 </i:Interaction.Triggers>
             </Slider>
 
-            <Label Content="{Binding Position, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+            <Label Content="{Binding Position, UpdateSourceTrigger=PropertyChanged}" />
+
+            <DockPanel HorizontalAlignment="Center">
+                <Button Height="30" Width="30" Margin="10" Content="back" Command="{Binding BackSong}" />
+                <Button Height="30" Width="30" Margin="10" Content="next" Command="{Binding NextSong}" />
+            </DockPanel>
+
 
         </StackPanel>
 
