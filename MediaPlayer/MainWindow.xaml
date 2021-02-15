@@ -56,7 +56,7 @@
 
             <Slider Minimum="0" Maximum="1.0"  Width="100" Margin="20" Value="{Binding Volume, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 
-            <Slider Margin="50" Minimum="0" Maximum="{Binding Duration}" Width="200" Value="{Binding Position, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+            <Slider Margin="50" Minimum="0" Maximum="{Binding Duration}" Width="300" Value="{Binding Position, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="PreviewMouseDown">
                         <i:InvokeCommandAction Command="{Binding Pause}"/>

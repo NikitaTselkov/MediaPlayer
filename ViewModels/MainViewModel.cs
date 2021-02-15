@@ -1,8 +1,5 @@
 ﻿using Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace ViewModels
@@ -47,7 +44,14 @@ namespace ViewModels
         }
 
         // Длительность аудио в секундах.
-        public double Duration => audioControl.Duration;
+        public double Duration
+        {
+            get {return audioControl.Duration; }
+            set 
+            {
+                RaisePropertyChanged();
+            }
+        }
 
         // Название текущей песни.
         public string CurrentSongName
@@ -107,18 +111,28 @@ namespace ViewModels
             if (param == null) throw new ArgumentNullException();
 
             audioControl.SelectSong(param);
+
+            Update();
         }
 
         public void NextSongMethod(object param)
         {
             audioControl.SwitchSong(NextOrBack.Next);
-            CurrentSongName = CurrentSongName;
+
+            Update();
         }
 
         public void BackSongMethod(object param)
         {
             audioControl.SwitchSong(NextOrBack.Back);
+
+            Update();
+        }
+
+        private void Update()
+        {
             CurrentSongName = CurrentSongName;
+            Duration = Duration;
         }
 
         /// <summary>
