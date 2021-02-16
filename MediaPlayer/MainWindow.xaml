@@ -18,33 +18,34 @@
             <DockPanel HorizontalAlignment="Center">
 
                 <Button
-                Command="{Binding Play}"
-                Width="100"
-                Height="50"
-                Content="play"
-                FontSize="25"
-            />
+                    Command="{Binding Play}"
+                    Width="100"
+                    Height="50"
+                    Content="play"
+                    FontSize="25"
+                />
 
                 <Button
-                Command="{Binding Stop}"
-                Width="100"
-                Height="50"
-                Content="stop"
-                FontSize="25"
-            />
+                    Command="{Binding Stop}"
+                    Width="100"
+                    Height="50"
+                    Content="stop"
+                    FontSize="25"
+                />
 
                 <Button
-                Command="{Binding Pause}"
-                Width="100"
-                Height="50"
-                Content="pause"
-                FontSize="25"
-            />
+                    Command="{Binding Pause}"
+                    Width="100"
+                    Height="50"
+                    Content="pause"
+                    FontSize="25"
+                />
+
+                <CheckBox IsChecked="{Binding IsPlayNextSong}" />
 
             </DockPanel>
 
             <StackPanel Height="100">
-
                 <ListBox SelectedItem="{Binding CurrentSongName, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" x:Name="SongsList" Height="100" Background="Bisque" ItemsSource="{Binding Playlist}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="SelectionChanged">

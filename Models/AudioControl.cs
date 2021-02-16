@@ -82,6 +82,14 @@ namespace Models
         }
 
         /// <summary>
+        /// Метод проверяющий закончилась текущая песня или нет.
+        /// </summary>
+        public bool IsSongEnded()
+        {
+            return Position == Duration;
+        }
+
+        /// <summary>
         /// Метод выбирающий песню.
         /// </summary>
         /// <param name="name"> Название песни. </param>

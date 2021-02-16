@@ -1,5 +1,6 @@
 ﻿using Models;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace ViewModels
@@ -7,6 +8,8 @@ namespace ViewModels
     public class MainViewModel : Navigation.NavigateViewModel
     {
         readonly AudioControl audioControl = new AudioControl();
+
+        readonly DataBaseControl dataBaseControl = new DataBaseControl();
 
 
         public RelayCommand Play { get; set; }
@@ -63,6 +66,18 @@ namespace ViewModels
             }
         }
 
+        // Нужно ли запускать следующую песню автоматически.
+        private bool isPlayNextSong = true;
+        public bool IsPlayNextSong
+        {
+            get { return isPlayNextSong; }
+            set 
+            {
+                isPlayNextSong = value;
+                RaisePropertyChanged();
+            }
+        }
+
         // Плейлист.
         public string[] Playlist => audioControl.Playlist;
 
@@ -82,11 +97,14 @@ namespace ViewModels
             SelectSong = new RelayCommand(SelectSongMethod);
 
 
-            audioControl.SetSong(@"C:\Users\nikit\Desktop\Bullfight.mp3");
+            // dataBaseControl.SaveFileToDatabase(@"C:\Users\nikit\Desktop\Sometimes You're The Hammer, Sometimes You're The Nail.mp3");
 
-            audioControl.SetSong(@"C:\Users\nikit\Desktop\Sometimes You're The Hammer, Sometimes You're The Nail.mp3");
+            // dataBaseControl.SaveFileToDatabase(@"C:\Users\nikit\Desktop\Sell Your Soul.mp3");
 
-            audioControl.SetSong(@"C:\Users\nikit\Desktop\Sell Your Soul.mp3");
+            foreach (var item in dataBaseControl.ReadFileFromDatabase())
+            {
+                audioControl.SetSong(item.SourceUrl);
+            }
 
             UpdatePosition();
         }
@@ -136,7 +154,7 @@ namespace ViewModels
         }
 
         /// <summary>
-        /// Метод обнавляющий позицию слайдера.
+        /// Метод обновляющий позицию слайдера.
         /// </summary>
         private void UpdatePosition()
         {
@@ -144,9 +162,23 @@ namespace ViewModels
             timer.Tick += (s, e) =>
             {
                 Position = audioControl.Position;
+
+                if (IsPlayNextSong && audioControl.IsSongEnded())
+                {
+                    PlayNextSong();
+                }
             };
 
             timer.Start();
+        }
+
+        private void PlayNextSong()
+        {
+            audioControl.SwitchSong(NextOrBack.Next);
+
+            audioControl.PlaySong();
+
+            Update();
         }
 
     }
