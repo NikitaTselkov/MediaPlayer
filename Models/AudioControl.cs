@@ -1,9 +1,7 @@
 ﻿using Catel.Collections;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Windows.Media;
 
 namespace Models
 {
@@ -19,7 +17,12 @@ namespace Models
         /// <summary>
         /// Плейлист.
         /// </summary>
-        public string[] Playlist => playlist.Select((a) => a.Name).ToArray();
+        public string[] Playlist => playlists[CurrentPlayTitle].Select((a) => a.Name).ToArray();
+
+        /// <summary>
+        /// Список плейлистов.
+        /// </summary>
+        public string[] Playlists => playlists.Select((a) => a.Key).ToArray();
 
         /// <summary>
         /// Громкость воспроизведения.
@@ -79,6 +82,7 @@ namespace Models
         {
             LoadAudio(path);
             SelectAudio(0);
+            SelectPlaylist("Title");
         }
 
         /// <summary>

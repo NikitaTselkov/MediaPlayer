@@ -1,6 +1,5 @@
 ﻿using Models;
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace ViewModels
@@ -80,6 +79,9 @@ namespace ViewModels
 
         // Плейлист.
         public string[] Playlist => audioControl.Playlist;
+
+        // Плейлисты.
+        public string[] Playlists => audioControl.Playlists;
 
 
         public MainViewModel()

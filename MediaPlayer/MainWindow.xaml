@@ -7,7 +7,7 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         mc:Ignorable="d"
         Title="MainWindow"
-        Height="450"
+        Height="500"
         Width="800"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
 
@@ -45,13 +45,17 @@
 
             </DockPanel>
 
-            <StackPanel Height="100">
-                <ListBox SelectedItem="{Binding CurrentSongName, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" x:Name="SongsList" Height="100" Background="Bisque" ItemsSource="{Binding Playlist}">
+            <StackPanel Height="140">
+                <ListBox SelectedItem="{Binding CurrentSongName, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" x:Name="SongsList" Height="70" Background="Bisque" ItemsSource="{Binding Playlist}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="SelectionChanged">
                             <i:InvokeCommandAction Command="{Binding SelectSong}" CommandParameter="{Binding ElementName=SongsList, Path=SelectedItem}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
+                </ListBox>
+
+                <ListBox ItemsSource="{Binding Playlists}" Height="70" Background="DarkGoldenrod">
+                    
                 </ListBox>
             </StackPanel>
 
@@ -70,7 +74,7 @@
 
             <Label Content="{Binding Position, UpdateSourceTrigger=PropertyChanged}" />
 
-            <DockPanel HorizontalAlignment="Center">
+            <DockPanel HorizontalAlignment="Center" >
                 <Button x:Name="bt1" Height="30" Width="30" Margin="10" Content="back" Command="{Binding BackSong}">
                 </Button>
                 <Button Height="30" Width="30" Margin="10" Content="next" Command="{Binding NextSong}" />

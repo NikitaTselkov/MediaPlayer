@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Media;
 
 
@@ -15,7 +16,10 @@ namespace Models
     {    
         private readonly MediaPlayer mediaPlayer;
         private readonly List<Audio> playlist;
+        private readonly Dictionary<string, List<Audio>> playlists;  // Список плейлистов.
         private int currentIndex;
+        private string CurrentPlayTitle;
+
         private bool isSwitchSong;
 
         public AudioControl()
@@ -23,6 +27,12 @@ namespace Models
             mediaPlayer = new MediaPlayer();
 
             playlist = new List<Audio>();
+
+            // Значение по умолчанию.
+            playlists = new Dictionary<string, List<Audio>>
+            {
+                { "Title", playlist }
+            };
 
             // Громкость по умолжанию.
             Volume = 1;
@@ -47,6 +57,24 @@ namespace Models
             ProgressChanged?.Invoke(this, Position);
             AudioSelected?.Invoke(this, CurrentAudio);
         }
+
+        /// <summary>
+        /// Метод выбора плейлиста.
+        /// </summary>
+        /// <param name="index"> Индекс плейлиста. </param>
+        public void SelectPlaylist(string title)
+        {
+            if (playlists.Keys.Any(a => a == title))
+            {
+                CurrentPlayTitle = title;
+            }
+        }
+
+        /// <summary>
+        /// Метод добавления плей листа.
+        /// </summary>
+        /// <param name="filepath"> Плейлист </param> 
+        public void LoadPlayLiat(string title, List<Audio> playlist) => playlists.Add(title, playlist);
 
         /// <summary>
         /// Метод добавления аудио в плейлист из файла.
