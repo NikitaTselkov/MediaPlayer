@@ -28,12 +28,12 @@ namespace Models
         public MediaPlayer Media { get; private set; }
 
 
-        public Audio(string path)
+        public Audio(string relativePath)
         {
             Media = new MediaPlayer();
-            Media.Open(new Uri(path, UriKind.Absolute));
-            Name = Path.GetFileNameWithoutExtension(Media.Source.AbsoluteUri).Replace("%20", " ");
-            SourceUrl = Media.Source.AbsoluteUri;
+            Media.Open(new Uri(relativePath, UriKind.Relative));
+            Name = relativePath.Substring(relativePath.LastIndexOf('\\') + 1).Replace(".mp3", "");
+            SourceUrl = relativePath; 
 
             GetDuration();
         }
@@ -55,31 +55,5 @@ namespace Models
 
             } while (true);
         }
-
-        //private void Broadcast(byte[] data)
-        //{
-        //    var r = new Mp3FileReader(WavToMP3(data));
-
-        //    while ((frame = r.ReadNextFrame()) != null)
-        //    {
-        //        foreach (Consumer c in WebCast.Clients) c.Audio(frame.RawData);
-
-        //        Console.Title = frame.FrameLength.ToString();
-        //    }
-        //}
-
-        //private MemoryStream WavToMP3(byte[] wavFile)
-        //{
-        //    using (var retMs = new MemoryStream())
-        //    using (var ms = new MemoryStream(wavFile))
-        //    using (var rdr = new RawSourceWaveStream(ms, new WaveFormat(44100, 16, 1)))
-        //    using (var wtr = new LameMP3FileWriter(retMs, rdr.WaveFormat, 128))
-        //    {
-        //        rdr.CopyTo(wtr);
-        //        wtr.Flush();
-        //        return new MemoryStream(retMs.ToArray());
-        //    }
-        //}
-
     }
 }

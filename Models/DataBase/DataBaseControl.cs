@@ -68,16 +68,17 @@ namespace Models
                 string playlistName = "";
                 byte[] data;
 
+                Directory.CreateDirectory("Music");
+
                 while (reader.Read())
                 {
                     filename = reader.GetString(1);
                     playlistName = reader.GetString(2);
                     data = (byte[])reader.GetValue(3);
 
-                    File.WriteAllBytes($@"C:\Users\nikit\Desktop\{filename}", data);
+                    File.WriteAllBytes($@"Music\{filename}", data);
 
-                    Audio audio = new Audio($@"C:\Users\nikit\Desktop\{filename}");
-
+                    Audio audio = new Audio($@"Music\{filename}");
 
                     if (!Playlists.Keys.Any(a => a == playlistName))
                     {

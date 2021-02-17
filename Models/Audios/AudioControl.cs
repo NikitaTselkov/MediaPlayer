@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Models
+namespace Models.Audios
 {
     public partial class AudioControl
     {

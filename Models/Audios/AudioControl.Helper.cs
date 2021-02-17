@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Media;
 
 
-namespace Models
+namespace Models.Audios
 {
     public enum NextOrBack
     { 
@@ -52,7 +51,7 @@ namespace Models
             if (currentIndex < 0)
                 currentIndex = playlists[currentPlaylistTitle].Count - 1;
 
-            mediaPlayer.Open(new Uri(playlists[currentPlaylistTitle][currentIndex].SourceUrl));
+            mediaPlayer.Open(new Uri(playlists[currentPlaylistTitle][currentIndex].SourceUrl, UriKind.Relative));
 
             ProgressChanged?.Invoke(this, Position);
             AudioSelected?.Invoke(this, CurrentAudio);
