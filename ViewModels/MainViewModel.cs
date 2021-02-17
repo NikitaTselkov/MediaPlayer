@@ -23,6 +23,8 @@ namespace ViewModels
 
         public RelayCommand SelectSong { get; set; }
 
+        public RelayCommand SelectPlaylist { get; set; }
+
         // Громкость.
         public double Volume
         {
@@ -65,6 +67,16 @@ namespace ViewModels
             }
         }
 
+        // Название текущего плейлиста.
+        public string CurrentPlaylistTitle
+        {
+            get { return audioControl.CurrentPlaylistTitle; }
+            set
+            {
+                RaisePropertyChanged();
+            }
+        }
+
         // Нужно ли запускать следующую песню автоматически.
         private bool isPlayNextSong = true;
         public bool IsPlayNextSong
@@ -78,10 +90,24 @@ namespace ViewModels
         }
 
         // Плейлист.
-        public string[] Playlist => audioControl.Playlist;
+        public string[] Playlist
+        {
+            get {return audioControl.Playlist; }
+            set
+            {
+                RaisePropertyChanged();
+            }
+        }
 
         // Плейлисты.
-        public string[] Playlists => audioControl.Playlists;
+        public string[] Playlists
+        {
+            get { return audioControl.Playlists; }
+            set 
+            {
+                RaisePropertyChanged();
+            }
+        }
 
 
         public MainViewModel()
@@ -98,14 +124,17 @@ namespace ViewModels
 
             SelectSong = new RelayCommand(SelectSongMethod);
 
+            SelectPlaylist = new RelayCommand(SelectPlaylistMethod);
 
-            // dataBaseControl.SaveFileToDatabase(@"C:\Users\nikit\Desktop\Sometimes You're The Hammer, Sometimes You're The Nail.mp3");
+            //dataBaseControl.SaveFileToDatabase(@"C:\Users\nikit\Desktop\Sometimes You're The Hammer, Sometimes You're The Nail.mp3", audioControl.CurrentPlaylistTitle);
 
-            // dataBaseControl.SaveFileToDatabase(@"C:\Users\nikit\Desktop\Sell Your Soul.mp3");
+            //dataBaseControl.SaveFileToDatabase(@"C:\Users\nikit\Desktop\Sell Your Soul.mp3", audioControl.CurrentPlaylistTitle);
+
+            //dataBaseControl.SaveFileToDatabase(@"C:\Users\nikit\Desktop\Bullfight.mp3", "Bullfight");
 
             foreach (var item in dataBaseControl.ReadFileFromDatabase())
             {
-                audioControl.SetSong(item.SourceUrl);
+                audioControl.SetNewPlayList(item.Key, item.Value);
             }
 
             UpdatePosition();
@@ -128,9 +157,22 @@ namespace ViewModels
 
         public void SelectSongMethod(object param)
         {
+            if (param != null)
+            {
+                audioControl.SelectSong(param);
+
+                Update();
+            }
+            
+        }
+
+        public void SelectPlaylistMethod(object param)
+        {
             if (param == null) throw new ArgumentNullException();
 
-            audioControl.SelectSong(param);
+            audioControl.StopSong();
+
+            audioControl.SelectPlaylist(param.ToString());
 
             Update();
         }
@@ -151,6 +193,9 @@ namespace ViewModels
 
         private void Update()
         {
+            Playlists = Playlists;
+            CurrentPlaylistTitle = CurrentPlaylistTitle;
+            Playlist = Playlist;
             CurrentSongName = CurrentSongName;
             Duration = Duration;
         }

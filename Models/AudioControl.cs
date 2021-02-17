@@ -12,12 +12,17 @@ namespace Models
         /// <summary>
         /// Текущее аудио.
         /// </summary>
-        public Audio CurrentAudio => playlist[currentIndex];
+        public Audio CurrentAudio => playlists[currentPlaylistTitle][currentIndex];
 
         /// <summary>
         /// Плейлист.
         /// </summary>
-        public string[] Playlist => playlists[CurrentPlayTitle].Select((a) => a.Name).ToArray();
+        public string[] Playlist => playlists[currentPlaylistTitle].Select((a) => a.Name).ToArray();
+
+        /// <summary>
+        /// Название текущего плейлиста.
+        /// </summary>
+        public string CurrentPlaylistTitle => currentPlaylistTitle;
 
         /// <summary>
         /// Список плейлистов.
@@ -78,11 +83,29 @@ namespace Models
         /// Метод устанавливающий песню.
         /// </summary>
         /// <param name="path"> Путь к песне. </param>
-        public void SetSong(string path)
+        public void SetNewSong(string path, string playlistTitle)
         {
             LoadAudio(path);
+            SelectPlaylist(playlistTitle);
             SelectAudio(0);
-            SelectPlaylist("Title");
+        }
+
+        /// <summary>
+        /// Метод добавления плей листа.
+        /// </summary>
+        /// <param name="filepath"> Плейлист </param> 
+        public void SetNewPlayList(string title, List<Audio> playlist)
+        {
+            if (!playlists.Keys.Any(a => a == title))
+            {
+                playlists.Add(title, playlist);
+            }
+            else
+            {
+                playlists[title] = playlist;
+            }
+
+            SetNewSong(playlist[0].SourceUrl, title);
         }
 
         /// <summary>
@@ -113,6 +136,24 @@ namespace Models
             {
                 isSwitchSong = false;
             }        
+        }
+
+        /// <summary>
+        /// Метод выбора плейлиста.
+        /// </summary>
+        /// <param name="index"> Название плейлиста. </param>
+        public void SelectPlaylist(string title)
+        {
+            if (string.IsNullOrWhiteSpace(title)) throw new ArgumentNullException();
+
+            if (playlists.Keys.Any(a => a == title))
+            {
+                currentIndex = 0;
+
+                currentPlaylistTitle = title;
+
+                SelectAudio(currentIndex);
+            }
         }
 
         /// <summary>

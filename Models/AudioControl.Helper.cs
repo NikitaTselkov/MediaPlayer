@@ -18,7 +18,7 @@ namespace Models
         private readonly List<Audio> playlist;
         private readonly Dictionary<string, List<Audio>> playlists;  // Список плейлистов.
         private int currentIndex;
-        private string CurrentPlayTitle;
+        private string currentPlaylistTitle = "Title";
 
         private bool isSwitchSong;
 
@@ -31,7 +31,7 @@ namespace Models
             // Значение по умолчанию.
             playlists = new Dictionary<string, List<Audio>>
             {
-                { "Title", playlist }
+                { currentPlaylistTitle, playlist }
             };
 
             // Громкость по умолжанию.
@@ -46,35 +46,17 @@ namespace Models
         {
             currentIndex = index;
 
-            if (currentIndex >= playlist.Count)
+            if (currentIndex >= playlists[currentPlaylistTitle].Count)
                 currentIndex = 0;
 
             if (currentIndex < 0)
-                currentIndex = playlist.Count - 1;
+                currentIndex = playlists[currentPlaylistTitle].Count - 1;
 
-            mediaPlayer.Open(new Uri(playlist[currentIndex].SourceUrl));
+            mediaPlayer.Open(new Uri(playlists[currentPlaylistTitle][currentIndex].SourceUrl));
 
             ProgressChanged?.Invoke(this, Position);
             AudioSelected?.Invoke(this, CurrentAudio);
         }
-
-        /// <summary>
-        /// Метод выбора плейлиста.
-        /// </summary>
-        /// <param name="index"> Индекс плейлиста. </param>
-        public void SelectPlaylist(string title)
-        {
-            if (playlists.Keys.Any(a => a == title))
-            {
-                CurrentPlayTitle = title;
-            }
-        }
-
-        /// <summary>
-        /// Метод добавления плей листа.
-        /// </summary>
-        /// <param name="filepath"> Плейлист </param> 
-        public void LoadPlayLiat(string title, List<Audio> playlist) => playlists.Add(title, playlist);
 
         /// <summary>
         /// Метод добавления аудио в плейлист из файла.
@@ -83,30 +65,10 @@ namespace Models
         private void LoadAudio(string filepath) => playlist.Add(new Audio(filepath));
 
         /// <summary>
-        /// Метод добавления нескольких аудио в плейлист.
-        /// </summary>
-        /// <param name="filepaths"> Массив путей к аудио файлам. </param>
-        private void LoadAudio(params string[] filepaths)
-        {
-            foreach (var file in filepaths)
-                LoadAudio(file);
-        }
-
-        /// <summary>
         /// Метод удаления аудио из плейлиста.
         /// </summary>
         /// <param name="index"> Позиция удоляемого элемента. </param>
         private void RemoveAudio(int index) => playlist.RemoveAt(index);
-
-        /// <summary>
-        /// Метод удаления нескольких аудио из плейлиста.
-        /// </summary>
-        /// <param name="index"> Позиция удоляемых элементов. </param>
-        private void RemoveAudio(params int[] indexes)
-        {
-            foreach (var index in indexes)
-                RemoveAudio(index);
-        }
 
         #region Controls
 

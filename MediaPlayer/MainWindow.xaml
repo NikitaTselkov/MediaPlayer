@@ -54,8 +54,12 @@
                     </i:Interaction.Triggers>
                 </ListBox>
 
-                <ListBox ItemsSource="{Binding Playlists}" Height="70" Background="DarkGoldenrod">
-                    
+                <ListBox SelectedItem="{Binding CurrentPlaylistTitle, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" ItemsSource="{Binding Playlists}" Height="70" Background="DarkGoldenrod" x:Name="Playlists">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction Command="{Binding SelectPlaylist}" CommandParameter="{Binding ElementName=Playlists, Path=SelectedItem}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                 </ListBox>
             </StackPanel>
 
@@ -73,6 +77,8 @@
             </Slider>
 
             <Label Content="{Binding Position, UpdateSourceTrigger=PropertyChanged}" />
+            
+            <Label Content="{Binding CurrentSongName, UpdateSourceTrigger=PropertyChanged}" />
 
             <DockPanel HorizontalAlignment="Center" >
                 <Button x:Name="bt1" Height="30" Width="30" Margin="10" Content="back" Command="{Binding BackSong}">

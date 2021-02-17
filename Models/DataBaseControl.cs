@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
+using System.Linq;
 
 namespace Models
 {
@@ -12,7 +13,7 @@ namespace Models
         /// <summary>
         /// Метод загружающий данные в базу данных.
         /// </summary>
-        public void SaveFileToDatabase(string filePath)
+        public void SaveFileToDatabase(string filePath, string playlistName)
         {
             using (var sqlConnection = new SqlConnection(ConnectionString))
             {
@@ -22,8 +23,9 @@ namespace Models
 
                 command.Connection = sqlConnection;
 
-                command.CommandText = @"INSERT INTO Playlist VALUES (@Name, @MP3)";
+                command.CommandText = @"INSERT INTO Playlist VALUES (@Name, @PlaylistName, @MP3)";
                 command.Parameters.Add("@Name", SqlDbType.NVarChar, 255);
+                command.Parameters.Add("@PlaylistName", SqlDbType.NVarChar, 255);
                 command.Parameters.Add("@MP3", SqlDbType.VarBinary);
 
                 // Получаем короткое имя файла для сохранения в бд.
@@ -39,6 +41,7 @@ namespace Models
 
                 // Передаем данные в команду через параметры.
                 command.Parameters["@Name"].Value = shortFileName;
+                command.Parameters["@PlaylistName"].Value = playlistName;
                 command.Parameters["@MP3"].Value = audioData;
 
                 command.ExecuteNonQuery();
@@ -49,9 +52,9 @@ namespace Models
         /// <summary>
         /// Метод получающий данные из базы данных.
         /// </summary>
-        public List<Audio> ReadFileFromDatabase()
+        public Dictionary<string, List<Audio>> ReadFileFromDatabase()
         {
-            List<Audio> Playlist = new List<Audio>();
+            var Playlists = new Dictionary<string, List<Audio>>();
 
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
@@ -61,18 +64,30 @@ namespace Models
                 SqlCommand command = new SqlCommand(sql, connection);
                 SqlDataReader reader = command.ExecuteReader();
 
+                string filename;
+                string playlistName = "";
+                byte[] data;
+
                 while (reader.Read())
                 {
-                    string filename = reader.GetString(1);
-                    byte[] data = (byte[])reader.GetValue(2);
+                    filename = reader.GetString(1);
+                    playlistName = reader.GetString(2);
+                    data = (byte[])reader.GetValue(3);
 
                     File.WriteAllBytes($@"C:\Users\nikit\Desktop\{filename}", data);
 
                     Audio audio = new Audio($@"C:\Users\nikit\Desktop\{filename}");
-                    Playlist.Add(audio);              
+
+
+                    if (!Playlists.Keys.Any(a => a == playlistName))
+                    {
+                        Playlists.Add(playlistName, new List<Audio>());
+                    }
+
+                    Playlists[playlistName].Add(audio);             
                 }
 
-                return Playlist;
+                return Playlists;
             }
         }
     }
