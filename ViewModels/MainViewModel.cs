@@ -26,6 +26,10 @@ namespace ViewModels
 
         public RelayCommand SelectPlaylist { get; set; }
 
+        public RelayCommand AddPlaylist { get; set; }
+
+        public RelayCommand AddMusic { get; set; }
+
         // Громкость.
         public double Volume
         {
@@ -110,7 +114,6 @@ namespace ViewModels
             }
         }
 
-
         public MainViewModel()
         {
             Play = new RelayCommand(PlayMethod);
@@ -127,16 +130,17 @@ namespace ViewModels
 
             SelectPlaylist = new RelayCommand(SelectPlaylistMethod);
 
-            //dataBaseControl.SaveFileToDatabase(@"C:\Users\nikit\Desktop\Sometimes You're The Hammer, Sometimes You're The Nail.mp3", audioControl.CurrentPlaylistTitle);
+            AddPlaylist = new RelayCommand(AddPlaylistMethod);
 
-            //dataBaseControl.SaveFileToDatabase(@"C:\Users\nikit\Desktop\Sell Your Soul.mp3", audioControl.CurrentPlaylistTitle);
+            AddMusic = new RelayCommand(AddMusicMethod);
 
-            //dataBaseControl.SaveFileToDatabase(@"C:\Users\nikit\Desktop\Bullfight.mp3", "Bullfight");
+            // dataBaseControl.SaveFileToDatabase(@"Music\Sometimes You're The Hammer, Sometimes You're The Nail.mp3", audioControl.CurrentPlaylistTitle);
 
-            foreach (var item in dataBaseControl.ReadFileFromDatabase())
-            {
-                audioControl.SetNewPlayList(item.Key, item.Value);
-            }
+            // dataBaseControl.SaveFileToDatabase(@"Music\Sell Your Soul.mp3", audioControl.CurrentPlaylistTitle);
+
+            // dataBaseControl.SaveFileToDatabase(@"Music\Bullfight.mp3", "Bullfight");
+
+            GetMusicFromDB();
 
             UpdatePosition();
         }
@@ -163,8 +167,7 @@ namespace ViewModels
                 audioControl.SelectSong(param);
 
                 Update();
-            }
-            
+            }          
         }
 
         public void SelectPlaylistMethod(object param)
@@ -176,6 +179,42 @@ namespace ViewModels
             audioControl.SelectPlaylist(param.ToString());
 
             Update();
+        }
+
+        public void AddPlaylistMethod(object param)
+        {
+            //TODO: Реализовать добавление плейлиста.
+        }
+
+        /// <summary>
+        /// Метод добавляет музыку через окно с выбором папок.
+        /// </summary>
+        public void AddMusicMethod(object param)
+        {
+            var openFileDialog = new OpenFileDialog();
+
+            openFileDialog.DefaultExt = "mp3";
+            openFileDialog.Filter = "mp3 files (*.mp3)|*.mp3";
+
+            var result = openFileDialog.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                // Получает абсолютный путь к mp3 файлу.
+                var path = openFileDialog.FileName;
+
+                // Если в плейлисте нет этой песни.
+                if (!audioControl.IsSongExist(path))
+                {
+                    // Сохраняет песню в базу данных.
+                    dataBaseControl.SaveFileToDatabase(path, CurrentPlaylistTitle);
+
+                    // Добавляет песню в текущий плейлист.
+                    audioControl.UpdatePlaylist(path, audioControl.CurrentPlaylistTitle);
+
+                    Update();
+                }
+            }
         }
 
         public void NextSongMethod(object param)
@@ -190,6 +229,17 @@ namespace ViewModels
             audioControl.SwitchSong(NextOrBack.Back);
 
             Update();
+        }
+
+        /// <summary>
+        /// Метод загружающий музыку с базы данных.
+        /// </summary>
+        private void GetMusicFromDB()
+        {
+            foreach (var item in dataBaseControl.ReadFileFromDatabase())
+            {
+                audioControl.SetNewPlayList(item.Key, item.Value);
+            }
         }
 
         private void Update()
@@ -211,6 +261,7 @@ namespace ViewModels
             {
                 Position = audioControl.Position;
 
+                // Запускает следующую песню если условие true.
                 if (IsPlayNextSong && audioControl.IsSongEnded())
                 {
                     PlayNextSong();

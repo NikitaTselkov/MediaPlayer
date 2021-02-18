@@ -25,13 +25,13 @@ namespace Models.Audios
         {
             mediaPlayer = new MediaPlayer();
 
-            playlist = new List<Audio>();
-
             // Значение по умолчанию.
             playlists = new Dictionary<string, List<Audio>>
             {
-                { currentPlaylistTitle, playlist }
+                { currentPlaylistTitle, new List<Audio>() }
             };
+
+            playlist = playlists[currentPlaylistTitle];
 
             // Громкость по умолжанию.
             Volume = 1;
@@ -61,7 +61,7 @@ namespace Models.Audios
         /// Метод добавления аудио в плейлист из файла.
         /// </summary>
         /// <param name="filepath"> Путь к аудиофайлу. </param> 
-        private void LoadAudio(string filepath) => playlist.Add(new Audio(filepath));
+        private void LoadAudio(string filepath, string title) => playlists[title].Add(new Audio(filepath));
 
         /// <summary>
         /// Метод удаления аудио из плейлиста.

@@ -81,9 +81,15 @@
             <Label Content="{Binding CurrentSongName, UpdateSourceTrigger=PropertyChanged}" />
 
             <DockPanel HorizontalAlignment="Center" >
-                <Button x:Name="bt1" Height="30" Width="30" Margin="10" Content="back" Command="{Binding BackSong}">
-                </Button>
+
+                <Button x:Name="bt1" Height="30" Width="30" Margin="10" Content="back" Command="{Binding BackSong}" />
+
                 <Button Height="30" Width="30" Margin="10" Content="next" Command="{Binding NextSong}" />
+                
+                <Button Height="30" Width="70" Margin="10" Content="AddPlaylist" Command="{Binding AddPlaylist}" />
+                
+                <Button Height="30" Width="60" Margin="10" Content="AddMusic" Command="{Binding AddMusic}" />
+
             </DockPanel>
 
 

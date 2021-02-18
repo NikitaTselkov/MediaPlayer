@@ -80,12 +80,10 @@ namespace Models.Audios
         }
 
         /// <summary>
-        /// Метод устанавливающий песню.
+        /// Метод устанавливающий песню из плейлиста.
         /// </summary>
-        /// <param name="path"> Путь к песне. </param>
-        public void SetNewSong(string path, string playlistTitle)
+        public void SetNewSong(string playlistTitle)
         {
-            LoadAudio(path);
             SelectPlaylist(playlistTitle);
             SelectAudio(0);
         }
@@ -105,7 +103,33 @@ namespace Models.Audios
                 playlists[title] = playlist;
             }
 
-            SetNewSong(playlist[0].SourceUrl, title);
+            SetNewSong(title);
+        }
+
+        /// <summary>
+        /// Метод добавляющий в плейлист новую песню.
+        /// </summary>
+        public void UpdatePlaylist(string path, string title)
+        {
+            LoadAudio(path, title);
+        }
+
+        /// <summary>
+        /// Метод проверяющий находится ли эта песня в плейлисте.
+        /// </summary>
+        public bool IsSongExist(string path)
+        {
+            var name = path.Substring(path.LastIndexOf('\\') + 1).Replace(".mp3", "");
+
+            foreach (var playlist in playlists.Values)
+            {
+                if (playlist.Any(a => a.Name == name))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>
