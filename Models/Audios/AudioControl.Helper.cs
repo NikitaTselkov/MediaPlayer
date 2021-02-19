@@ -13,28 +13,39 @@ namespace Models.Audios
     }
 
     public partial class AudioControl
-    {    
+    {
+        private readonly DataBaseControl dataBaseControl = new DataBaseControl();
         private readonly MediaPlayer mediaPlayer;
-        private readonly List<Audio> playlist;
         private readonly Dictionary<string, List<Audio>> playlists;  // Список плейлистов.
         private int currentIndex;
-        private string currentPlaylistTitle = "Title";
+        private string currentPlaylistTitle;
 
         private bool isSwitchSong;
 
         public AudioControl()
         {
-            DataBaseControl dataBaseControl = new DataBaseControl();
+            // Получение данных из базы.
+            playlists = dataBaseControl.ReadFileFromDatabase();
+
+            currentPlaylistTitle = playlists.Keys.FirstOrDefault();
+
+
+            if (currentPlaylistTitle == null)
+            {
+                // Значение по умолчанию.
+
+                currentPlaylistTitle = "Title";
+
+                var newPlaylist = new List<Audio>();
+
+                var audio = new Audio(@"C:\Users\nikit\Desktop\My Funeral.mp3");
+
+                newPlaylist.Add(audio);
+
+                playlists.Add(currentPlaylistTitle, newPlaylist);
+            }
 
             mediaPlayer = new MediaPlayer();
-
-           // Значение по умолчанию.
-            playlists = new Dictionary<string, List<Audio>>()
-            {
-                { currentPlaylistTitle, new List<Audio>() }
-            };
-
-            playlist = new List<Audio>();
 
             // Громкость по умолжанию.
             Volume = 1;

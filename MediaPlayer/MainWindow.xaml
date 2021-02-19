@@ -97,6 +97,8 @@
 
                 <Button Height="30" Width="90" Margin="10" Content="RemovePlaylist" Command="{Binding RemovePlaylist}" />
 
+                <Button Height="30" Width="90" Margin="10" Content="Rename" Command="{Binding RenamePlaylist}" />
+
             </DockPanel>
 
 

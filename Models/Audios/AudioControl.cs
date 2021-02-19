@@ -89,7 +89,7 @@ namespace Models.Audios
         }
 
         /// <summary>
-        /// Метод добавления плей листа.
+        /// Метод добавления плейлиста.
         /// </summary>
         /// <param name="filepath"> Плейлист </param> 
         public void SetNewPlayList(string title, List<Audio> playlist)
@@ -104,6 +104,27 @@ namespace Models.Audios
             }
 
             SetNewSong(title);
+        }
+
+        /// <summary>
+        /// Метод меняющий название текущему плейлисту.
+        /// </summary>
+        public void RenameCurrentPlaylist(string newTitle)
+        {
+            // Создание и добавление плейлиста, с новым названием.
+            var playlist = playlists[currentPlaylistTitle];
+
+            playlists.Add(newTitle, playlist);
+
+            // Удаление старого плейлиста.
+            var oldPlaylistTitle = currentPlaylistTitle;
+
+            currentPlaylistTitle = newTitle;
+
+            playlists.Remove(oldPlaylistTitle);
+
+            // Меняет название в базе данных.
+            dataBaseControl.RenameFileFromDatabase(oldPlaylistTitle, newTitle);
         }
 
         /// <summary>

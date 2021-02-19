@@ -96,6 +96,22 @@ namespace Models
         }
 
         /// <summary>
+        /// Метод меняющий название плейлиста в базе данных.
+        /// </summary>
+        public void RenameFileFromDatabase(string oldTitle, string newTitle)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+
+                oldTitle = oldTitle.Replace("'", "''");
+                newTitle = newTitle.Replace("'", "''");
+
+                CommandToDataBase($"UPDATE Playlist SET PlaylistName='{newTitle}' WHERE PlaylistName='{oldTitle}'", connection);                        
+            }
+        }
+
+        /// <summary>
         /// Метод получающий данные из базы данных.
         /// </summary>
         public Dictionary<string, List<Audio>> ReadFileFromDatabase()

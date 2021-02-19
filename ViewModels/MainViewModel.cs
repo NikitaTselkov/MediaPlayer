@@ -35,6 +35,8 @@ namespace ViewModels
 
         public RelayCommand RemovePlaylist { get; set; }
 
+        public RelayCommand RenamePlaylist { get; set; }
+
         // Громкость.
         public double Volume
         {
@@ -155,8 +157,7 @@ namespace ViewModels
 
             RemovePlaylist = new RelayCommand(RemovePlaylistMethod);
 
-
-            GetMusicFromDB();
+            RenamePlaylist = new RelayCommand(RenamePlaylistMethod);
 
             UpdatePosition();
         }
@@ -207,6 +208,7 @@ namespace ViewModels
                 if (!audioControl.IsPlaylistExist(TitleNewPlaylist))
                 {
                     //TODO: Сделать выбор песен которые попадут в этот плейлист.
+                    //TODO: Проверять наличие этих песен в других плейлистах.
 
                     var newPlaylist = new List<Audio>();
 
@@ -287,6 +289,22 @@ namespace ViewModels
             Update();
         }
 
+        /// <summary>
+        /// Метод меняющий название текущему плейлисту.
+        /// </summary>
+        public void RenamePlaylistMethod(object param)
+        {
+            if (TitleNewPlaylist != null && TitleNewPlaylist != "")
+            {
+                if (!audioControl.IsPlaylistExist(TitleNewPlaylist))
+                {
+                    audioControl.RenameCurrentPlaylist(titleNewPlaylist);
+
+                    Update();
+                }
+            }
+        }
+
         public void NextSongMethod(object param)
         {
             audioControl.SwitchSong(NextOrBack.Next);
@@ -299,17 +317,6 @@ namespace ViewModels
             audioControl.SwitchSong(NextOrBack.Back);
 
             Update();
-        }
-
-        /// <summary>
-        /// Метод загружающий музыку с базы данных.
-        /// </summary>
-        private void GetMusicFromDB()
-        {
-            foreach (var item in dataBaseControl.ReadFileFromDatabase())
-            {
-                audioControl.SetNewPlayList(item.Key, item.Value);
-            }
         }
 
         private void Update()
