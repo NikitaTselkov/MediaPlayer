@@ -2,6 +2,7 @@
 using Models;
 using System;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace ViewModels
 {
@@ -29,6 +30,10 @@ namespace ViewModels
         public RelayCommand AddPlaylist { get; set; }
 
         public RelayCommand AddMusic { get; set; }
+
+        public RelayCommand RemoveMusic { get; set; }
+
+        public RelayCommand RemovePlaylist { get; set; }
 
         // Громкость.
         public double Volume
@@ -78,6 +83,18 @@ namespace ViewModels
             get { return audioControl.CurrentPlaylistTitle; }
             set
             {
+                RaisePropertyChanged();
+            }
+        }
+
+        // Назавание нового плейлиста.
+        private string titleNewPlaylist;
+        public string TitleNewPlaylist
+        {
+            get { return titleNewPlaylist; }
+            set
+            {
+                titleNewPlaylist = value;
                 RaisePropertyChanged();
             }
         }
@@ -134,11 +151,10 @@ namespace ViewModels
 
             AddMusic = new RelayCommand(AddMusicMethod);
 
-            // dataBaseControl.SaveFileToDatabase(@"Music\Sometimes You're The Hammer, Sometimes You're The Nail.mp3", audioControl.CurrentPlaylistTitle);
+            RemoveMusic = new RelayCommand(RemoveMusicMethod);
 
-            // dataBaseControl.SaveFileToDatabase(@"Music\Sell Your Soul.mp3", audioControl.CurrentPlaylistTitle);
+            RemovePlaylist = new RelayCommand(RemovePlaylistMethod);
 
-            // dataBaseControl.SaveFileToDatabase(@"Music\Bullfight.mp3", "Bullfight");
 
             GetMusicFromDB();
 
@@ -172,7 +188,7 @@ namespace ViewModels
 
         public void SelectPlaylistMethod(object param)
         {
-            if (param == null) throw new ArgumentNullException();
+            if (param == null) param = audioControl.CurrentPlaylistTitle;
 
             audioControl.StopSong();
 
@@ -181,9 +197,31 @@ namespace ViewModels
             Update();
         }
 
+        /// <summary>
+        /// Метод добавляющий плейлист.
+        /// </summary>
         public void AddPlaylistMethod(object param)
         {
-            //TODO: Реализовать добавление плейлиста.
+            if (TitleNewPlaylist != null && TitleNewPlaylist != "")
+            {
+                if (!audioControl.IsPlaylistExist(TitleNewPlaylist))
+                {
+                    //TODO: Сделать выбор песен которые попадут в этот плейлист.
+
+                    var newPlaylist = new List<Audio>();
+
+                    var audio = new Audio(@"C:\Users\nikit\Desktop\My Funeral.mp3");
+
+                    newPlaylist.Add(audio);
+
+                    // Сохраняет песню в базу данных.
+                    dataBaseControl.SaveFileToDatabase(newPlaylist, TitleNewPlaylist);                
+
+                    audioControl.SetNewPlayList(TitleNewPlaylist, newPlaylist);
+
+                    Update();
+                }   
+            }   
         }
 
         /// <summary>
@@ -198,11 +236,11 @@ namespace ViewModels
 
             var result = openFileDialog.ShowDialog();
 
+            // Получает абсолютный путь к mp3 файлу.
+            var path = openFileDialog.FileName;
+
             if (result == DialogResult.OK)
             {
-                // Получает абсолютный путь к mp3 файлу.
-                var path = openFileDialog.FileName;
-
                 // Если в плейлисте нет этой песни.
                 if (!audioControl.IsSongExist(path))
                 {
@@ -215,6 +253,38 @@ namespace ViewModels
                     Update();
                 }
             }
+        }
+
+        /// <summary>
+        /// Метод удаляющий музыку из плейлиста.
+        /// Если плейлист закончился, удаляется и он.
+        /// </summary>
+        public void RemoveMusicMethod(object param)
+        {
+            //TODO: Спрашивать подтверждение на удаление.
+
+            var name = audioControl.CurrentAudio.Name;
+
+            if (audioControl.RemoveSongFromPlaylist())
+            {
+                dataBaseControl.RemoveFileFromDatabase(name);
+            }
+     
+            Update();
+        }
+
+        /// <summary>
+        /// Метод удаляющий плейлист.
+        /// </summary>
+        public void RemovePlaylistMethod(object param)
+        {
+            //TODO: Спрашивать подтверждение на удаление.
+
+            dataBaseControl.RemoveFileFromDatabase(audioControl.CurrentPlaylistTitle, SongOrPlaylist.Playlist);
+
+            audioControl.RemovePlaylist();
+
+            Update();
         }
 
         public void NextSongMethod(object param)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Media;
 
 
@@ -23,15 +24,17 @@ namespace Models.Audios
 
         public AudioControl()
         {
+            DataBaseControl dataBaseControl = new DataBaseControl();
+
             mediaPlayer = new MediaPlayer();
 
-            // Значение по умолчанию.
-            playlists = new Dictionary<string, List<Audio>>
+           // Значение по умолчанию.
+            playlists = new Dictionary<string, List<Audio>>()
             {
                 { currentPlaylistTitle, new List<Audio>() }
             };
 
-            playlist = playlists[currentPlaylistTitle];
+            playlist = new List<Audio>();
 
             // Громкость по умолжанию.
             Volume = 1;
@@ -51,7 +54,7 @@ namespace Models.Audios
             if (currentIndex < 0)
                 currentIndex = playlists[currentPlaylistTitle].Count - 1;
 
-            mediaPlayer.Open(new Uri(playlists[currentPlaylistTitle][currentIndex].SourceUrl, UriKind.Relative));
+            mediaPlayer.Open(new Uri(playlists[currentPlaylistTitle][currentIndex].SourceUrl, UriKind.Relative));         
 
             ProgressChanged?.Invoke(this, Position);
             AudioSelected?.Invoke(this, CurrentAudio);
@@ -61,13 +64,40 @@ namespace Models.Audios
         /// Метод добавления аудио в плейлист из файла.
         /// </summary>
         /// <param name="filepath"> Путь к аудиофайлу. </param> 
+        /// <param name="title"> Название плейлиста. </param> 
         private void LoadAudio(string filepath, string title) => playlists[title].Add(new Audio(filepath));
 
         /// <summary>
         /// Метод удаления аудио из плейлиста.
         /// </summary>
         /// <param name="index"> Позиция удоляемого элемента. </param>
-        private void RemoveAudio(int index) => playlist.RemoveAt(index);
+        /// <param name="title"> Название плейлиста. </param> 
+        private void RemoveAudio(int index, string title) => playlists[title].RemoveAt(index);
+
+        /// <summary>
+        /// Метод находящий название предыдущеге плейлиста.
+        /// </summary>
+        private string FindFreeTitle()
+        {
+            var previousKey = "";
+
+            if (playlists.Keys.First() == CurrentPlaylistTitle && playlists.Keys.Count > 1)
+            {
+                return playlists.Keys.Skip(1).First();
+            }
+
+            foreach (var key in playlists.Keys)
+            {
+                if (key == CurrentPlaylistTitle)
+                {
+                    break;
+                }
+
+                previousKey = key;
+            }
+
+            return previousKey;
+        }
 
         #region Controls
 

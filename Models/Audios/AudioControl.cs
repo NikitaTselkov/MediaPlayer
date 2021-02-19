@@ -94,7 +94,7 @@ namespace Models.Audios
         /// <param name="filepath"> Плейлист </param> 
         public void SetNewPlayList(string title, List<Audio> playlist)
         {
-            if (!playlists.Keys.Any(a => a == title))
+            if (!IsPlaylistExist(title))
             {
                 playlists.Add(title, playlist);
             }
@@ -112,6 +112,67 @@ namespace Models.Audios
         public void UpdatePlaylist(string path, string title)
         {
             LoadAudio(path, title);
+        }
+
+        /// <summary>
+        /// Метод удаляющий текущую песню из плейлиста.
+        /// Возвращает true если удаление прошло успешно.
+        /// </summary>
+        public bool RemoveSongFromPlaylist()
+        {
+            if (currentIndex - 1 < Playlist.Length)
+            {
+                if (currentIndex > 0)
+                {
+                    currentIndex -= 1;
+
+                    SelectAudio(currentIndex);
+
+                    RemoveAudio(currentIndex + 1, CurrentPlaylistTitle);
+                    return true;
+                }
+                else if (Playlist.Length == 1)
+                {
+                    RemovePlaylist();
+                    return true;
+                }
+                else if (currentIndex == 0)
+                {
+                    RemoveAudio(currentIndex, CurrentPlaylistTitle);
+                    SelectAudio(currentIndex);
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Метод удаляющий текущий плейлист.
+        /// </summary>
+        public void RemovePlaylist()
+        {
+            if (playlists.Keys.Count != 1)
+            {
+                var oldPlaylistTitle = CurrentPlaylistTitle;
+
+                currentPlaylistTitle = FindFreeTitle();
+
+                playlists.Remove(oldPlaylistTitle);
+
+                SelectPlaylist(currentPlaylistTitle);
+
+                SelectAudio(currentIndex);
+            }        
+        }
+
+        /// <summary>
+        /// Метод проверяющий существует ли плейлист с названием title.
+        /// </summary>
+        public bool IsPlaylistExist(string title)
+        {
+            return playlists.Keys.Any(a => a == title);
         }
 
         /// <summary>

@@ -28,12 +28,12 @@ namespace Models
         public MediaPlayer Media { get; private set; }
 
 
-        public Audio(string relativePath)
+        public Audio(string path)
         {
             Media = new MediaPlayer();
-            Media.Open(new Uri(relativePath, UriKind.Relative));
-            Name = relativePath.Substring(relativePath.LastIndexOf('\\') + 1).Replace(".mp3", "");
-            SourceUrl = relativePath; 
+            Media.Open(new Uri(path, UriKind.Relative));
+            Name = path.Substring(path.LastIndexOf('\\') + 1).Replace(".mp3", "");
+            SourceUrl = path; 
 
             GetDuration();
         }
