@@ -1,0 +1,21 @@
+﻿<Window x:Class="MediaPlayer.Windows.ConfirmationForDeletionDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MediaPlayer.Windows"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        mc:Ignorable="d"
+        Title="ConfirmationForDeletionDialog"
+        Height="450" 
+        Width="400">
+
+    <Grid>
+        
+        <DockPanel HorizontalAlignment="Center">
+            <Button Width="100" Height="50" Content="Да" FontSize="30" Margin="30" Command="{Binding GetResult}" CommandParameter="true" />
+            <Button Width="100" Height="50" Content="Нет" FontSize="30" Margin="30" Command="{Binding GetResult}" CommandParameter="false" />
+        </DockPanel>
+
+    </Grid>
+</Window>

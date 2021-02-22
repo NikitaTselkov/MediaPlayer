@@ -3,10 +3,12 @@ using Models;
 using System;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using GalaSoft.MvvmLight;
+using ViewModels.WindowService;
 
 namespace ViewModels
 {
-    public class MainViewModel : Navigation.NavigateViewModel
+    public class MainViewModel : ViewModelBase
     {
         readonly AudioControl audioControl = new AudioControl();
 
@@ -219,6 +221,10 @@ namespace ViewModels
             {
                 if (!audioControl.IsPlaylistExist(TitleNewPlaylist))
                 {
+                    var newPlaylistViewModel = new NewPlaylistViewModel();
+
+                    DisplayRootRegistry.ShowModalPresentation(newPlaylistViewModel);
+
                     //TODO: Сделать выбор песен которые попадут в этот плейлист.
                     //TODO: Проверять наличие этих песен в других плейлистах.
 
@@ -229,7 +235,7 @@ namespace ViewModels
                     newPlaylist.Add(audio);
 
                     // Сохраняет песню в базу данных.
-                    dataBaseControl.SaveFileToDatabase(newPlaylist, TitleNewPlaylist);                
+                    dataBaseControl.SaveFileToDatabase(newPlaylist, TitleNewPlaylist);
 
                     audioControl.SetNewPlayList(TitleNewPlaylist, newPlaylist);
 
@@ -274,17 +280,19 @@ namespace ViewModels
         /// Если плейлист закончился, удаляется и он.
         /// </summary>
         public void RemoveMusicMethod(object param)
-        {
-            //TODO: Спрашивать подтверждение на удаление.
-
-            var name = audioControl.CurrentAudio.Name;
-
-            if (audioControl.RemoveSongFromPlaylist())
+        {         
+            // Подтверждение на удаление.
+            if (GetConfirmationForDeletion())
             {
-                dataBaseControl.RemoveFileFromDatabase(name);
+                var name = audioControl.CurrentAudio.Name;
+
+                if (audioControl.RemoveSongFromPlaylist())
+                {
+                    dataBaseControl.RemoveFileFromDatabase(name);
+                }
+
+                Update();
             }
-     
-            Update();
         }
 
         /// <summary>
@@ -292,13 +300,15 @@ namespace ViewModels
         /// </summary>
         public void RemovePlaylistMethod(object param)
         {
-            //TODO: Спрашивать подтверждение на удаление.
+            // Подтверждение на удаление.
+            if (GetConfirmationForDeletion())
+            {
+                dataBaseControl.RemoveFileFromDatabase(audioControl.CurrentPlaylistTitle, SongOrPlaylist.Playlist);
 
-            dataBaseControl.RemoveFileFromDatabase(audioControl.CurrentPlaylistTitle, SongOrPlaylist.Playlist);
+                audioControl.RemovePlaylist();
 
-            audioControl.RemovePlaylist();
-
-            Update();
+                Update();
+            }
         }
 
         /// <summary>
@@ -368,6 +378,19 @@ namespace ViewModels
             audioControl.PlaySong();
 
             Update();
+        }
+
+        /// <summary>
+        /// Метод получающий подтверждение на удаление.
+        /// </summary>
+        /// <returns> Результат запроса true или false. </returns>
+        private bool GetConfirmationForDeletion()
+        {
+            var confirmationForDeletionViewModel = new ConfirmationForDeletionViewModel();
+
+            DisplayRootRegistry.ShowModalPresentation(confirmationForDeletionViewModel);
+
+            return confirmationForDeletionViewModel.Result;
         }
 
     }
