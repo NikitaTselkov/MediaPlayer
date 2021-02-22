@@ -7,7 +7,7 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         mc:Ignorable="d"
         Title="MainWindow"
-        Height="550"
+        Height="600"
         Width="800"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
 
@@ -79,11 +79,15 @@
             <Label Content="название плейлиста" />
             <TextBox Background="Lavender" Text="{Binding TitleNewPlaylist}" />
 
+
+            <Label Content="название песни или группы" />
+            <TextBox Background="Lavender" Text="{Binding TitleSongOrGroup}" />
+
             <Label Content="{Binding Position, UpdateSourceTrigger=PropertyChanged}" />
             
             <Label Content="{Binding CurrentSongName, UpdateSourceTrigger=PropertyChanged}" />
 
-            <DockPanel HorizontalAlignment="Center" >
+            <DockPanel HorizontalAlignment="Center">
 
                 <Button x:Name="bt1" Height="30" Width="30" Margin="10" Content="back" Command="{Binding BackSong}" />
 

@@ -101,6 +101,18 @@ namespace ViewModels
             }
         }
 
+        // Назавание песни или группы.
+        private string titleSongOrGroup;
+        public string TitleSongOrGroup
+        {
+            get { return titleSongOrGroup; }
+            set
+            {
+                titleSongOrGroup = value;
+                RaisePropertyChanged();
+            }
+        }
+
         // Нужно ли запускать следующую песню автоматически.
         private bool isPlayNextSong = true;
         public bool IsPlayNextSong
@@ -323,6 +335,7 @@ namespace ViewModels
         {
             Playlists = Playlists;
             CurrentPlaylistTitle = CurrentPlaylistTitle;
+            TitleSongOrGroup = TitleSongOrGroup;
             Playlist = Playlist;
             CurrentSongName = CurrentSongName;
             Duration = Duration;
