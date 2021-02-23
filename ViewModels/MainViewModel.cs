@@ -103,18 +103,6 @@ namespace ViewModels
             }
         }
 
-        // Назавание песни или группы.
-        private string titleSongOrGroup;
-        public string TitleSongOrGroup
-        {
-            get { return titleSongOrGroup; }
-            set
-            {
-                titleSongOrGroup = value;
-                RaisePropertyChanged();
-            }
-        }
-
         // Нужно ли запускать следующую песню автоматически.
         private bool isPlayNextSong = true;
         public bool IsPlayNextSong
@@ -217,31 +205,41 @@ namespace ViewModels
         /// </summary>
         public void AddPlaylistMethod(object param)
         {
-            if (TitleNewPlaylist != null && TitleNewPlaylist != "")
+            var newPlaylistViewModel = new PlaylistControlViewModel();
+
+            DisplayRootRegistry.ShowModalPresentation(newPlaylistViewModel);
+
+            if (newPlaylistViewModel.NewPlaylist.Count != 0)
             {
-                if (!audioControl.IsPlaylistExist(TitleNewPlaylist))
+                var newPlaylist = new List<Audio>();
+
+                TitleNewPlaylist = newPlaylistViewModel.TitleNewPlaylist;
+
+                if (TitleNewPlaylist == null || TitleNewPlaylist == "")
                 {
-                    var newPlaylistViewModel = new NewPlaylistViewModel();
-
-                    DisplayRootRegistry.ShowModalPresentation(newPlaylistViewModel);
-
-                    //TODO: Сделать выбор песен которые попадут в этот плейлист.
-                    //TODO: Проверять наличие этих песен в других плейлистах.
-
-                    var newPlaylist = new List<Audio>();
-
-                    var audio = new Audio(@"C:\Users\nikit\Desktop\My Funeral.mp3");
-
-                    newPlaylist.Add(audio);
-
+                    TitleNewPlaylist = "New Title";
+                }
+                while (audioControl.IsPlaylistExist(TitleNewPlaylist))
+                {
+                    TitleNewPlaylist += 1;
+                }
+                foreach (var item in newPlaylistViewModel.NewPlaylist)
+                {
+                    if (!audioControl.IsSongExist(item.SourceUrl))
+                    {
+                        newPlaylist.Add(item);
+                    }
+                }
+                if (newPlaylist.Count != 0)
+                {
                     // Сохраняет песню в базу данных.
                     dataBaseControl.SaveFileToDatabase(newPlaylist, TitleNewPlaylist);
 
                     audioControl.SetNewPlayList(TitleNewPlaylist, newPlaylist);
 
                     Update();
-                }   
-            }   
+                }
+            }
         }
 
         /// <summary>
@@ -345,7 +343,6 @@ namespace ViewModels
         {
             Playlists = Playlists;
             CurrentPlaylistTitle = CurrentPlaylistTitle;
-            TitleSongOrGroup = TitleSongOrGroup;
             Playlist = Playlist;
             CurrentSongName = CurrentSongName;
             Duration = Duration;

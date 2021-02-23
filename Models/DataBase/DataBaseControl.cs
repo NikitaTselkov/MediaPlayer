@@ -136,16 +136,23 @@ namespace Models
                     playlistName = reader.GetString(2);
                     data = (byte[])reader.GetValue(3);
 
-                    File.WriteAllBytes($@"Music\{filename}", data);
-
-                    Audio audio = new Audio($@"Music\{filename}");
-
-                    if (!Playlists.Keys.Any(a => a == playlistName))
+                    try
                     {
-                        Playlists.Add(playlistName, new List<Audio>());
-                    }
+                        File.WriteAllBytes($@"Music\{filename}", data);
 
-                    Playlists[playlistName].Add(audio);             
+                        Audio audio = new Audio($@"Music\{filename}");
+
+                        if (!Playlists.Keys.Any(a => a == playlistName))
+                        {
+                            Playlists.Add(playlistName, new List<Audio>());
+                        }
+
+                        Playlists[playlistName].Add(audio);
+                    }
+                    catch (Exception)
+                    {
+                        //TODO: Исправить.
+                    }
                 }
 
                 return Playlists;

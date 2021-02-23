@@ -75,13 +75,6 @@
                 </i:Interaction.Triggers>
             </Slider>
 
-            <Label Content="название плейлиста" />
-            <TextBox Background="Lavender" Text="{Binding TitleNewPlaylist}" />
-
-
-            <Label Content="название песни или группы" />
-            <TextBox Background="Lavender" Text="{Binding TitleSongOrGroup}" />
-
             <Label Content="{Binding Position, UpdateSourceTrigger=PropertyChanged}" />
             
             <Label Content="{Binding CurrentSongName, UpdateSourceTrigger=PropertyChanged}" />

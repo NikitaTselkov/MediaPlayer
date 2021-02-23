@@ -13,11 +13,11 @@ using System.Windows.Shapes;
 namespace MediaPlayer.Windows
 {
     /// <summary>
-    /// Логика взаимодействия для CreateNewPlaylistDialog.xaml
+    /// Логика взаимодействия для LoadingScreen.xaml
     /// </summary>
-    public partial class CreateNewPlaylistDialog : Window
+    public partial class LoadingScreen : Window
     {
-        public CreateNewPlaylistDialog()
+        public LoadingScreen()
         {
             InitializeComponent();
         }

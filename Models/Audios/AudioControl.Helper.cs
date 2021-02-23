@@ -38,6 +38,8 @@ namespace Models.Audios
 
                 var newPlaylist = new List<Audio>();
 
+                //TODO: Заменить.
+
                 var audio = new Audio(@"C:\Users\nikit\Desktop\My Funeral.mp3");
 
                 newPlaylist.Add(audio);

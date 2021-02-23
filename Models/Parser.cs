@@ -11,7 +11,7 @@ namespace Models
     {
         private string[] Refs;
 
-        private List<string> DownloadedRefs = new List<string>();
+        public readonly List<string> DownloadedRefs = new List<string>();
 
 
         public Parser(string title)
