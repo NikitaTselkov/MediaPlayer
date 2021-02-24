@@ -173,7 +173,10 @@ namespace ViewModels
         /// </summary>
         public void AddInPlaylistMethod(object param)
         {
-            NewPlaylist.Add(CurrentAudio);
+            if (CurrentAudio != null)
+            {
+                NewPlaylist.Add(CurrentAudio);
+            } 
         }
 
         /// <summary>
@@ -240,11 +243,6 @@ namespace ViewModels
         private void GetAudiosFromWeb(string title)
         {
             if (title == "") throw new ArgumentNullException();
-
-            var loadingScreen = new LoadingScreenViewModel();
-
-            DisplayRootRegistry.ShowModalPresentation(loadingScreen);
-            //TODO: Доделать экран загрузки.
 
             Parser parser = new Parser(title);
 

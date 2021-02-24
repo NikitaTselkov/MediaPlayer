@@ -13,6 +13,8 @@ namespace Models
 
         public readonly List<string> DownloadedRefs = new List<string>();
 
+        // Прогресс загрузки.
+        public double DownloadProgress { get; private set; }
 
         public Parser(string title)
         {
@@ -38,7 +40,12 @@ namespace Models
 
             while (Refs.Length != DownloadedRefs.Count)
             {
-                Console.WriteLine($"Загруженно: {DownloadedRefs.Count} из {Refs.Length}");
+                // Находит процент загрузки.
+                if (DownloadedRefs.Count != 0)
+                {
+                    DownloadProgress = (Refs.Length / DownloadedRefs.Count) * 100;
+                }
+               
             }
         }
 

@@ -29,20 +29,20 @@ namespace Models.Audios
 
             currentPlaylistTitle = playlists.Keys.FirstOrDefault();
 
-
             if (currentPlaylistTitle == null)
             {
                 // Значение по умолчанию.
+
+                Parser parser = new Parser("");
 
                 currentPlaylistTitle = "Title";
 
                 var newPlaylist = new List<Audio>();
 
-                //TODO: Заменить.
-
-                var audio = new Audio(@"C:\Users\nikit\Desktop\My Funeral.mp3");
-
-                newPlaylist.Add(audio);
+                foreach (var path in parser.DownloadedRefs)
+                {
+                    newPlaylist.Add(new Audio(path));
+                }
 
                 playlists.Add(currentPlaylistTitle, newPlaylist);
             }

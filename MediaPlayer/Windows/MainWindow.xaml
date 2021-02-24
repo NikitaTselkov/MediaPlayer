@@ -75,6 +75,8 @@
                 </i:Interaction.Triggers>
             </Slider>
 
+            <TextBox  Text="{Binding NewTitle}"/>
+
             <Label Content="{Binding Position, UpdateSourceTrigger=PropertyChanged}" />
             
             <Label Content="{Binding CurrentSongName, UpdateSourceTrigger=PropertyChanged}" />

@@ -24,8 +24,7 @@ namespace MediaPlayer
         {
             DisplayRootRegistry.RegisterWindowType<MainViewModel, MainWindow>();
             DisplayRootRegistry.RegisterWindowType<PlaylistControlViewModel, PlaylistControlDialog>();           
-            DisplayRootRegistry.RegisterWindowType<ConfirmationForDeletionViewModel, ConfirmationForDeletionDialog>();           
-            DisplayRootRegistry.RegisterWindowType<LoadingScreenViewModel, LoadingScreen>();           
+            DisplayRootRegistry.RegisterWindowType<ConfirmationForDeletionViewModel, ConfirmationForDeletionDialog>();                    
         }
 
         protected override void OnStartup(StartupEventArgs e)
