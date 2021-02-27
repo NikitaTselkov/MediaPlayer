@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -9,7 +10,7 @@ namespace Models
 {
     public class Parser
     {
-        private string[] Refs;
+        private List<string> Refs;
 
         public readonly List<string> DownloadedRefs = new List<string>();
 
@@ -23,7 +24,9 @@ namespace Models
             // Получает ссылки на песни.
             Refs = GetMusicFromHotplayerRu(title);
 
-            for (int i = 0; i < Refs.Length; i++)
+            var refsCount = 0;
+
+            for (int i = 0; i < Refs.Count; i++)
             {
                 // Ссылка.
                 url = Refs[i];
@@ -34,18 +37,22 @@ namespace Models
                 // Имя для файла.
                 songName = Uri.UnescapeDataString(match.Groups[6].Value);
 
-                // Сохраняет mp3 файл на компьютере.
-                _ = GetUrlFile(url, $@"Music\{songName}.mp3");
+                if (!Regex.IsMatch(songName, @"\$|\!|\?|\."))
+                {
+                    // Сохраняет mp3 файл на компьютере.
+                    _ = GetUrlFile(url, $@"Music\{songName}.mp3");
+
+                    refsCount++;
+                }
             }
 
-            while (Refs.Length != DownloadedRefs.Count)
+            while (refsCount != DownloadedRefs.Count)
             {
                 // Находит процент загрузки.
                 if (DownloadedRefs.Count != 0)
                 {
-                    DownloadProgress = (Refs.Length / DownloadedRefs.Count) * 100;
-                }
-               
+                    DownloadProgress = (Refs.Count / DownloadedRefs.Count) * 100;
+                }           
             }
         }
 
@@ -53,7 +60,7 @@ namespace Models
         /// Метод получающий ссылки на скачивание по названию песни или группы.
         /// </summary>
         /// <param name="title"> Название песни или группы. </param>
-        private string[] GetMusicFromHotplayerRu(string title)
+        private List<string> GetMusicFromHotplayerRu(string title)
         {
             List<string> result = new List<string>();
 
@@ -75,7 +82,7 @@ namespace Models
                 }
             }
 
-            return result.ToArray();
+            return result;
         }
 
         // Метод скачивающий файл по ссылке.

@@ -7,12 +7,53 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         mc:Ignorable="d"
         Title="MainWindow"
-        Height="600"
-        Width="800">
+        WindowState="Maximized"
+        Height="768"
+        Width="1024"
+        MinHeight="600"
+        MinWidth="800">
 
-    <Grid>
+    <Grid Background="{StaticResource DarkBlue2}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="165*"/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="20*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="169*"/>
+            <ColumnDefinition Width="471*"/>
+        </Grid.ColumnDefinitions>
 
-        <StackPanel VerticalAlignment="Center">
+        <StackPanel Background="{StaticResource DarkBlue}" Grid.Row="0">
+
+            <Viewbox VerticalAlignment="Top" HorizontalAlignment="Left">
+
+                <Label
+                    Width="100"
+                    Foreground="{StaticResource White}"
+                    Content="Playlists"
+                />
+                
+            </Viewbox>
+
+            <Viewbox VerticalAlignment="Top" HorizontalAlignment="Left">
+
+                <ListBox Style="{StaticResource playlists}" SelectedItem="{Binding CurrentPlaylistTitle, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" ItemsSource="{Binding Playlists}" x:Name="Playlists" Width="200">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction Command="{Binding SelectPlaylist}" CommandParameter="{Binding ElementName=Playlists, Path=SelectedItem}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ListBox>
+
+            </Viewbox>
+
+        </StackPanel>
+
+        <Grid Background="{StaticResource DarkBlue}" Grid.Row="2" Grid.ColumnSpan="2">
+        </Grid>
+
+        <!--<StackPanel VerticalAlignment="Center">
 
             <DockPanel HorizontalAlignment="Center">
 
@@ -100,7 +141,7 @@
             </DockPanel>
 
 
-        </StackPanel>
+        </StackPanel>-->
 
     </Grid>
 </Window>

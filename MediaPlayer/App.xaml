@@ -11,9 +11,13 @@
 
         <ResourceDictionary>
 
+            <BitmapImage x:Key="musicIcon" UriSource="/Icons/music.png" />
+
             <ResourceDictionary.MergedDictionaries>
 
                 <ResourceDictionary Source="Styles/Colors.xaml" />
+                
+                <ResourceDictionary Source="Styles/Playlists.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
 

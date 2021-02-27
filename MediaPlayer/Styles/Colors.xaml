@@ -3,6 +3,21 @@
                     xmlns:local="clr-namespace:MediaPlayer.Styles">
 
     <Color x:Key="black">#121212</Color>
-    <SolidColorBrush  x:Key="Black" Color="{StaticResource black}" />
+    <SolidColorBrush x:Key="Black" Color="{StaticResource black}" />
+
+    <Color x:Key="darkBlue">#111727</Color>
+    <SolidColorBrush x:Key="DarkBlue" Color="{StaticResource darkBlue}" />
+
+    <Color x:Key="darkBlue2">#0E1726</Color>
+    <SolidColorBrush x:Key="DarkBlue2" Color="{StaticResource darkBlue2}" />
+
+    <Color x:Key="white">#D6DBE5</Color>
+    <SolidColorBrush x:Key="White" Color="{StaticResource white}" />
+
+    <Color x:Key="lightBlue">#00B8D6</Color>
+    <SolidColorBrush x:Key="LightBlue" Color="{StaticResource lightBlue}" />
+
+    <Color x:Key="gray">#494F5F</Color>
+    <SolidColorBrush x:Key="Gray" Color="{StaticResource gray}" />
 
 </ResourceDictionary>
