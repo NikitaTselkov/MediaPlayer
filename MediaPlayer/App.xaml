@@ -4,7 +4,8 @@
              xmlns:local="clr-namespace:MediaPlayer"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              d1p1:Ignorable="d"
-             xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:VM="clr-namespace:ViewModels;assembly=ViewModels"
              ShutdownMode="OnMainWindowClose">
     
     <Application.Resources>
@@ -13,11 +14,17 @@
 
             <BitmapImage x:Key="musicIcon" UriSource="/Icons/music.png" />
 
+            <VM:DateTimeToDateConverter x:Key="DateConverter" />
+            
             <ResourceDictionary.MergedDictionaries>
 
                 <ResourceDictionary Source="Styles/Colors.xaml" />
                 
                 <ResourceDictionary Source="Styles/Playlists.xaml" />
+                
+                <ResourceDictionary Source="Styles/Songs.xaml" />
+
+                <ResourceDictionary Source="Styles/AudioControls.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
 
