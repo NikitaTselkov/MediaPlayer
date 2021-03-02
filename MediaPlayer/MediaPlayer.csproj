@@ -12,6 +12,7 @@
     <None Remove="Icons\playButton.png" />
     <None Remove="Icons\switchButtonLeft.png" />
     <None Remove="Icons\switchButtonRight.png" />
+    <None Remove="Icons\Volume.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,6 +25,7 @@
     <Resource Include="Icons\playButton.png" />
     <Resource Include="Icons\switchButtonLeft.png" />
     <Resource Include="Icons\switchButtonRight.png" />
+    <Resource Include="Icons\volume.png" />
   </ItemGroup>
 
 </Project>

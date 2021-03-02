@@ -70,13 +70,17 @@
 
             </Viewbox>
 
-        </StackPanel> 
+        </StackPanel>
 
-        <DockPanel Background="{StaticResource DarkBlue}" Grid.Row="2" Grid.ColumnSpan="2">
+        <Grid Background="{StaticResource DarkBlue}" Grid.Row="2" Grid.Column="0">
 
-            <Viewbox>
+            <Viewbox  MaxWidth="400" MinWidth="100" >
 
-                <DockPanel>
+                <DockPanel Background="{StaticResource DarkBlue}">
+
+                    <Viewbox Width="150">
+                        <Label Style="{StaticResource audioName}" Content="{Binding CurrentSongName, UpdateSourceTrigger=PropertyChanged}" />
+                    </Viewbox>
 
                     <Button Style="{StaticResource switchSong}" Command="{Binding BackSong}">
                         <Image Source="{StaticResource switchButtonLeftIcon}" RenderOptions.BitmapScalingMode="HighQuality" />
@@ -92,7 +96,11 @@
 
             </Viewbox>
 
-            <Viewbox>
+        </Grid>
+
+        <DockPanel Background="{StaticResource DarkBlue}" Grid.Row="2" Grid.Column="1">
+
+            <Viewbox Margin="0 0 50 0">
 
                 <DockPanel>
 
@@ -111,12 +119,18 @@
 
                     <Label Content="{Binding Duration, Converter={StaticResource DateConverter}}" Style="{StaticResource label}" Foreground="{StaticResource Gray}" />
 
+                    <Image Margin="5 0" Width="10" Height="10" Source="{StaticResource volumeIcon}" RenderOptions.BitmapScalingMode="HighQuality" />
+
+                    <Slider Style="{StaticResource positionSlider}" Maximum="1.0" Width="100" Value="{Binding Volume, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+
                 </DockPanel>
-                    
+
             </Viewbox>
 
         </DockPanel>
 
+        
+        
         <!--<StackPanel VerticalAlignment="Center">
 
             <DockPanel HorizontalAlignment="Center">
@@ -191,6 +205,7 @@
                 <Button x:Name="bt1" Height="30" Width="30" Margin="10" Content="back" Command="{Binding BackSong}" />
 
                 <Button Height="30" Width="30" Margin="10" Content="next" Command="{Binding NextSong}" />
+        
                 
                 <Button Height="30" Width="70" Margin="10" Content="AddPlaylist" Command="{Binding AddPlaylist}" />
                 

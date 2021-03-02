@@ -22,6 +22,8 @@
             
             <BitmapImage x:Key="pauseButtonIcon" UriSource="/Icons/pauseButton.png" />
 
+            <BitmapImage x:Key="volumeIcon" UriSource="/Icons/volume.png" />
+
             <VM:DateTimeToDateConverter x:Key="DateConverter" />
             
             <ResourceDictionary.MergedDictionaries>
