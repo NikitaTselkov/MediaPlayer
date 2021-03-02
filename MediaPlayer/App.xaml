@@ -14,6 +14,14 @@
 
             <BitmapImage x:Key="musicIcon" UriSource="/Icons/music.png" />
 
+            <BitmapImage x:Key="switchButtonLeftIcon" UriSource="/Icons/switchButtonLeft.png" />
+            
+            <BitmapImage x:Key="switchButtonRightIcon" UriSource="/Icons/switchButtonRight.png" />
+
+            <BitmapImage x:Key="playButtonIcon" UriSource="/Icons/playButton.png" />
+            
+            <BitmapImage x:Key="pauseButtonIcon" UriSource="/Icons/pauseButton.png" />
+
             <VM:DateTimeToDateConverter x:Key="DateConverter" />
             
             <ResourceDictionary.MergedDictionaries>

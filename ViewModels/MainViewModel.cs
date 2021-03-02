@@ -39,6 +39,8 @@ namespace ViewModels
 
         public RelayCommand RenamePlaylist { get; set; }
 
+        public RelayCommand PlayOrStop { get; set; }
+
         // Громкость.
         public double Volume
         {
@@ -127,6 +129,18 @@ namespace ViewModels
             }
         }
 
+        // Запущена ли песня.
+        private bool isPlaySong;
+        public bool IsPlaySong
+        {
+            get { return isPlaySong; }
+            set
+            {
+                isPlaySong = value;
+                RaisePropertyChanged();
+            }
+        }
+
         // Плейлист.
         public string[] Playlist
         {
@@ -173,12 +187,16 @@ namespace ViewModels
 
             RenamePlaylist = new RelayCommand(RenamePlaylistMethod);
 
+            PlayOrStop = new RelayCommand(PlayOrStopMethod);
+
             UpdatePosition();
         }
 
         public void PlayMethod(object param)
         {
             audioControl.PlaySong();
+
+            IsPlaySong = true;
         }
 
         public void PauseMethod(object param)
@@ -199,6 +217,20 @@ namespace ViewModels
 
                 Update();
             }          
+        }
+
+        public void PlayOrStopMethod(object param)
+        {
+            if (IsPlaySong == true)
+            {
+                audioControl.PauseSong();
+            }
+            else
+            {
+                audioControl.PlaySong();
+            }
+
+            IsPlaySong = !IsPlaySong;
         }
 
         public void SelectPlaylistMethod(object param)
@@ -341,14 +373,22 @@ namespace ViewModels
         {
             audioControl.SwitchSong(NextOrBack.Next);
 
+            audioControl.PlaySong();
+
             Update();
+
+            IsPlaySong = true;
         }
 
         public void BackSongMethod(object param)
         {
             audioControl.SwitchSong(NextOrBack.Back);
 
+            audioControl.PlaySong();
+
             Update();
+
+            IsPlaySong = true;
         }
 
         private void Update()
@@ -358,6 +398,7 @@ namespace ViewModels
             Playlist = Playlist;
             CurrentSongName = CurrentSongName;
             Duration = Duration;
+            IsPlaySong = false;
         }
 
         /// <summary>
@@ -374,6 +415,8 @@ namespace ViewModels
                 if (IsPlayNextSong && audioControl.IsSongEnded())
                 {
                     PlayNextSong();
+
+                    IsPlaySong = true;
                 }
             };
 
@@ -387,6 +430,8 @@ namespace ViewModels
             audioControl.PlaySong();
 
             Update();
+
+            IsPlaySong = true;
         }
 
         /// <summary>

@@ -78,15 +78,33 @@
 
                 <DockPanel>
 
+                    <Button Style="{StaticResource switchSong}" Command="{Binding BackSong}">
+                        <Image Source="{StaticResource switchButtonLeftIcon}" RenderOptions.BitmapScalingMode="HighQuality" />
+                    </Button>
+
+                    <Button Style="{StaticResource playAndStopButton}" Command="{Binding PlayOrStop}" CommandParameter="{Binding IsPlaySong}" />
+
+                    <Button Style="{StaticResource switchSong}" Command="{Binding NextSong}">
+                        <Image Source="{StaticResource switchButtonRightIcon}" RenderOptions.BitmapScalingMode="HighQuality" />
+                    </Button>
+
+                </DockPanel>
+
+            </Viewbox>
+
+            <Viewbox>
+
+                <DockPanel>
+
                     <Label Content="{Binding Position, Converter={StaticResource DateConverter}}" Style="{StaticResource label}" Foreground="{StaticResource LightBlue}" />
 
                     <Slider Style="{StaticResource positionSlider}" Maximum="{Binding Duration}" Value="{Binding Position}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="PreviewMouseDown">
-                                <i:InvokeCommandAction Command="{Binding Pause}"/>
+                                <i:InvokeCommandAction Command="{Binding Pause}" />
                             </i:EventTrigger>
                             <i:EventTrigger EventName="PreviewMouseUp">
-                                <i:InvokeCommandAction Command="{Binding Play}"/>
+                                <i:InvokeCommandAction Command="{Binding Play}" />
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </Slider>

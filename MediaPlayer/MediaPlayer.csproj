@@ -8,6 +8,10 @@
 
   <ItemGroup>
     <None Remove="Icons\music.png" />
+    <None Remove="Icons\pauseButton.png" />
+    <None Remove="Icons\playButton.png" />
+    <None Remove="Icons\switchButtonLeft.png" />
+    <None Remove="Icons\switchButtonRight.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -16,6 +20,10 @@
 
   <ItemGroup>
     <Resource Include="Icons\music.png" />
+    <Resource Include="Icons\pauseButton.png" />
+    <Resource Include="Icons\playButton.png" />
+    <Resource Include="Icons\switchButtonLeft.png" />
+    <Resource Include="Icons\switchButtonRight.png" />
   </ItemGroup>
 
 </Project>
