@@ -105,6 +105,7 @@ namespace ViewModels
             }
         }
 
+        //TODO: Перенести в другой класс.
         // Новое назавание плейлиста.
         private string newTitle;
         public string NewTitle
@@ -358,6 +359,7 @@ namespace ViewModels
         /// </summary>
         public void RenamePlaylistMethod(object param)
         {
+            //TODO: Изменить.
             if (NewTitle != null && NewTitle != "")
             {
                 if (!audioControl.IsPlaylistExist(NewTitle))

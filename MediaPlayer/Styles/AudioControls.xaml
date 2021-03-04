@@ -2,7 +2,10 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:MediaPlayer.Styles">
 
-    <BlurEffect x:Key="SliderEffect" Radius="2" />
+
+    <BlurEffect x:Key="blurEffect" Radius="2" />
+    <DropShadowEffect x:Key="blueShadowEffect" ShadowDepth="0" BlurRadius="10" Color="{StaticResource lightBlue}" />
+    <DropShadowEffect x:Key="whiteShadowEffect" ShadowDepth="0" BlurRadius="10" Color="{StaticResource white}" />
 
     <Style TargetType="Button" x:Key="playButton">
         <Setter Property="Width" Value="100" />
@@ -13,20 +16,35 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-
+                    
                     <Border 
+                        x:Name="border"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
                         Background="{TemplateBinding Background}"
                         CornerRadius="12">
 
                         <ContentPresenter
+                            x:Name="content"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                        />
+                        />       
 
                     </Border>
 
+                    <ControlTemplate.Triggers>
+
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Width" Value="97" />
+                        </Trigger>
+                        
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Effect" Value="{StaticResource blueShadowEffect}" />
+                            <Setter TargetName="content" Property="Effect" Value="{StaticResource whiteShadowEffect}" />
+                        </Trigger>
+
+                    </ControlTemplate.Triggers>
+                        
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -56,7 +74,7 @@
                     <Grid>
 
                         <Border Background="{StaticResource LightBlue}" CornerRadius="2 0 0 2" BorderThickness="0" Height="1"/>
-                        <Border Effect="{StaticResource SliderEffect}" Background="{StaticResource LightBlue}" BorderThickness="0" Height="1"/>
+                        <Border Effect="{StaticResource blurEffect}" Background="{StaticResource LightBlue}" BorderThickness="0" Height="1"/>
                         
                     </Grid>
 
@@ -78,7 +96,7 @@
 
                         <Ellipse Height="10" Width="10" Fill="Transparent" Stroke="{StaticResource LightBlue}" StrokeThickness="0.5"  />
 
-                        <Ellipse Height="10" Width="10" Effect="{StaticResource SliderEffect}" Fill="Transparent" StrokeThickness="1" Stroke="{StaticResource LightBlue}" />
+                        <Ellipse Height="10" Width="10" Effect="{StaticResource blurEffect}" Fill="Transparent" StrokeThickness="1" Stroke="{StaticResource LightBlue}" />
 
                     </Grid>
                     
