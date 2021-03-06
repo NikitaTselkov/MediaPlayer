@@ -24,6 +24,8 @@
 
             <BitmapImage x:Key="volumeIcon" UriSource="/Icons/volume.png" />
 
+            <BitmapImage x:Key="repeatIcon" UriSource="/Icons/repeat.png" />
+
             <VM:DateTimeToDateConverter x:Key="DateConverter" />
             
             <ResourceDictionary.MergedDictionaries>

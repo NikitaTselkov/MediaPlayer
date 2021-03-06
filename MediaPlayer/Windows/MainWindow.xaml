@@ -53,7 +53,7 @@
 
         <StackPanel Grid.Column="1">
 
-            <Viewbox HorizontalAlignment="Left" VerticalAlignment="Top" MaxWidth="500">
+            <Viewbox HorizontalAlignment="Left" VerticalAlignment="Top">
 
                 <ListBox Style="{StaticResource songs}" ItemContainerStyle="{StaticResource songsItem}" SelectedItem="{Binding CurrentSongName, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" x:Name="SongsList" ItemsSource="{Binding Playlist}">
                     <i:Interaction.Triggers>
@@ -69,7 +69,7 @@
 
         <Grid Background="{StaticResource DarkBlue}" Grid.Row="2" Grid.Column="0">
 
-            <Viewbox  MaxWidth="400" MinWidth="100" >
+            <Viewbox Margin="10 0 0 0" MaxWidth="400" MinWidth="100" >
 
                 <DockPanel Background="{StaticResource DarkBlue}">
 
@@ -114,8 +114,10 @@
 
                     <Label Content="{Binding Duration, Converter={StaticResource DateConverter}}" Style="{StaticResource label}" Foreground="{StaticResource Gray}" />
 
-                    <Image Margin="5 0" Width="10" Height="10" Source="{StaticResource volumeIcon}" RenderOptions.BitmapScalingMode="HighQuality" />
+                    <CheckBox Style="{StaticResource repeatButton}" IsChecked="{Binding IsPlayNextSong}" />
 
+                    <Image Margin="5 0" Width="10" Height="10" Source="{StaticResource volumeIcon}" RenderOptions.BitmapScalingMode="HighQuality" />
+                    
                     <Slider Style="{StaticResource positionSlider}" Maximum="1.0" Width="100" Value="{Binding Volume, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 
                 </DockPanel>
@@ -138,31 +140,31 @@
 
             <Viewbox Margin="5 10" MaxHeight="50">
 
-                <Button Style="{StaticResource playButton}" Content="Add Playlist" Command="{Binding AddPlaylist}" />
+                <Button Style="{StaticResource buttons}" Content="Add Playlist" Command="{Binding AddPlaylist}" />
 
             </Viewbox>
 
             <Viewbox Margin="5 10" MaxHeight="50">
 
-                <Button Style="{StaticResource playButton}" Content="Add Music" Command="{Binding AddMusic}" />
+                <Button Style="{StaticResource buttons}" Content="Add Music" Command="{Binding AddMusic}" />
 
             </Viewbox>
 
             <Viewbox Margin="5 10" MaxHeight="50">
 
-                <Button Style="{StaticResource playButton}" Content="Remove Playlist" Command="{Binding RemovePlaylist}" />
+                <Button Style="{StaticResource buttons}" Content="Remove Playlist" Command="{Binding RemovePlaylist}" />
 
             </Viewbox>
 
             <Viewbox Margin="5 10" MaxHeight="50">
 
-                <Button Style="{StaticResource playButton}" Content="Remove Music" Command="{Binding RemoveMusic}" />
+                <Button Style="{StaticResource buttons}" Content="Remove Music" Command="{Binding RemoveMusic}" />
 
             </Viewbox>
 
             <Viewbox Margin="5 10" MaxHeight="50">
 
-                <Button Style="{StaticResource playButton}" Content="Rename Playlist" Command="{Binding RenamePlaylist}" />
+                <Button Style="{StaticResource buttons}" Content="Rename Playlist" Command="{Binding RenamePlaylist}" />
 
             </Viewbox>
 

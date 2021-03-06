@@ -7,15 +7,32 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         mc:Ignorable="d"
         Title="ConfirmationForDeletionDialog"
-        Height="450" 
+        WindowStyle="None"
+        ShowInTaskbar="False"
+        ResizeMode="NoResize"
+        Background="Transparent"
+        AllowsTransparency="True"
+        Height="200" 
         Width="400">
 
-    <Grid>
+    <StackPanel Margin="10" Background="{StaticResource DarkBlue2}">
         
+        <StackPanel.Effect>
+            <DropShadowEffect BlurRadius="15" ShadowDepth="0" Color="{StaticResource lightBlue}" />
+        </StackPanel.Effect>
+
+        <Label
+            Content="Подтвердить действие"
+            HorizontalAlignment="Center"
+            FontSize="25"
+            Foreground="{StaticResource White}"
+            Margin="10"
+        />
+
         <DockPanel HorizontalAlignment="Center">
-            <Button Width="100" Height="50" Content="Да" FontSize="30" Margin="30" Command="{Binding GetResult}" CommandParameter="true" />
-            <Button Width="100" Height="50" Content="Нет" FontSize="30" Margin="30" Command="{Binding GetResult}" CommandParameter="false" />
+            <Button Style="{StaticResource buttons}" Width="100" Height="50" Content="Yes" FontSize="30" Margin="30" Command="{Binding GetResult}" CommandParameter="true" />
+            <Button Style="{StaticResource buttons}" Width="100" Height="50" Content="No" FontSize="30" Margin="30" Command="{Binding GetResult}" CommandParameter="false" />
         </DockPanel>
 
-    </Grid>
+    </StackPanel>
 </Window>

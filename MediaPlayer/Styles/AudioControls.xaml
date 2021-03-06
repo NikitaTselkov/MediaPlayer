@@ -7,7 +7,7 @@
     <DropShadowEffect x:Key="blueShadowEffect" ShadowDepth="0" BlurRadius="10" Color="{StaticResource lightBlue}" />
     <DropShadowEffect x:Key="whiteShadowEffect" ShadowDepth="0" BlurRadius="10" Color="{StaticResource white}" />
 
-    <Style TargetType="Button" x:Key="playButton">
+    <Style TargetType="Button" x:Key="buttons">
         <Setter Property="Width" Value="100" />
         <Setter Property="Height" Value="25" />
         <Setter Property="Foreground" Value="{StaticResource White}" />
@@ -248,6 +248,76 @@
                             <Setter TargetName="content" Property="Height" Value="27" />
                         </Trigger>
                         
+                    </ControlTemplate.Triggers>
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="repeatButton" TargetType="CheckBox">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="CheckBox">
+
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        BorderBrush="{TemplateBinding BorderBrush}">
+
+                        <Image x:Name="content" Margin="5 0" Width="10" Height="10" Source="{DynamicResource repeatIcon}" RenderOptions.BitmapScalingMode="HighQuality" RenderTransformOrigin="0.5, 0.5">
+
+                            <Image.RenderTransform>
+                                <RotateTransform x:Name="AnimatedRotateTransform" Angle="0" />
+                            </Image.RenderTransform>
+
+                        </Image>
+
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+
+                        <Trigger Property="IsChecked" Value="True">
+                            
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="AnimatedRotateTransform" 
+                                            Storyboard.TargetProperty="Angle"
+                                            By="10"        
+                                            To="360" 
+                                            Duration="0:0:0.7" 
+                                            RepeatBehavior="Forever"
+                                            AccelerationRatio="0.4"
+                                            DecelerationRatio="0.4"
+                                        />
+                                        
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="AnimatedRotateTransform" 
+                                            Storyboard.TargetProperty="Angle"
+                                            By="10"        
+                                            To="0" 
+                                            Duration="0:0:0" 
+                                        />
+
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                            
+                        </Trigger>
+
                     </ControlTemplate.Triggers>
 
                 </ControlTemplate>
