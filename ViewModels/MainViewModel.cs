@@ -105,19 +105,6 @@ namespace ViewModels
             }
         }
 
-        //TODO: Перенести в другой класс.
-        // Новое назавание плейлиста.
-        private string newTitle;
-        public string NewTitle
-        {
-            get { return newTitle; }
-            set
-            {
-                newTitle = value;
-                RaisePropertyChanged();
-            }
-        }
-
         // Нужно ли запускать следующую песню автоматически.
         private bool isPlayNextSong = true;
         public bool IsPlayNextSong
@@ -359,12 +346,15 @@ namespace ViewModels
         /// </summary>
         public void RenamePlaylistMethod(object param)
         {
-            //TODO: Изменить.
-            if (NewTitle != null && NewTitle != "")
+            RenamePlaylistViewModel renamePlaylistViewModel = new RenamePlaylistViewModel();
+
+            DisplayRootRegistry.ShowModalPresentation(renamePlaylistViewModel);
+
+            if (renamePlaylistViewModel.NewTitle != null && renamePlaylistViewModel.NewTitle != "")
             {
-                if (!audioControl.IsPlaylistExist(NewTitle))
+                if (!audioControl.IsPlaylistExist(renamePlaylistViewModel.NewTitle))
                 {
-                    audioControl.RenameCurrentPlaylist(NewTitle);
+                    audioControl.RenameCurrentPlaylist(renamePlaylistViewModel.NewTitle);
 
                     Update();
                 }
