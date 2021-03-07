@@ -37,7 +37,7 @@ namespace Models
                 // Имя для файла.
                 songName = Uri.UnescapeDataString(match.Groups[6].Value);
 
-                if (!Regex.IsMatch(songName, @"\$|\!|\?|\."))
+                if (!Regex.IsMatch(songName, @"\$|\!|\?|\.|\(|\)|\|"))
                 {
                     // Сохраняет mp3 файл на компьютере.
                     _ = GetUrlFile(url, $@"Music\{songName}.mp3");

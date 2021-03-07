@@ -1,15 +1,41 @@
-﻿using GalaSoft.MvvmLight;
+﻿using Catel.Collections;
+using GalaSoft.MvvmLight;
 using Models;
 using Models.Audios;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Windows.Media;
 using ViewModels.WindowService;
 
 namespace ViewModels
 {
+    public class Playlist : ViewModelBase
+    {
+        private string title;
+        public string Title
+        {
+            get { return title; }
+            set
+            {
+                title = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool isCheck;
+        public bool IsCheck
+        {
+            get { return isCheck; }
+            set
+            {
+                isCheck = value;
+                RaisePropertyChanged();
+            }
+        }
+    }
+
     public class PlaylistControlViewModel : ViewModelBase
     {
         private readonly MediaPlayer mediaPlayer = new MediaPlayer();
@@ -53,8 +79,8 @@ namespace ViewModels
         }
 
         // Плейлист.
-        private string[] _playlist;
-        public string[] Playlist
+        private ObservableCollection<Playlist> _playlist;
+        public ObservableCollection<Playlist> Playlist
         {
             get { return _playlist; }
             set
@@ -107,6 +133,33 @@ namespace ViewModels
             set
             {
                 isSelectedAll = value;
+
+                if (isSelectedAll == true)
+                {
+                    for (int i = 0; i < Playlist.Count; i++)
+                    {
+                        Playlist[i].IsCheck = true;
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < Playlist.Count; i++)
+                    {
+                        Playlist[i].IsCheck = false;
+                    }
+                }              
+
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool result;
+        public bool Result
+        {
+            get { return result; }
+            set
+            {
+                result = value;
                 RaisePropertyChanged();
             }
         }
@@ -119,9 +172,9 @@ namespace ViewModels
         public RelayCommand Stop { get; set; }
         public RelayCommand Pause { get; set; }
         public RelayCommand SelectSong { get; set; }
-        public RelayCommand Add { get; set; }
         public RelayCommand CreateNewPlaylist { get; set; }
         public RelayCommand WindowClosing { get; set; }
+        public RelayCommand GetResult { get; set; }
 
         public PlaylistControlViewModel()
         {
@@ -130,11 +183,13 @@ namespace ViewModels
             Stop = new RelayCommand(StopMethod);
             Pause = new RelayCommand(PauseMethod);
             SelectSong = new RelayCommand(SelectSongMethod);
-            Add = new RelayCommand(AddInPlaylistMethod);
             CreateNewPlaylist = new RelayCommand(CreateNewPlaylistMethod);
             WindowClosing = new RelayCommand(WindowClosingMethod);
+            GetResult = new RelayCommand(GetResultMethod);
 
             mediaPlayer.Volume = 1;
+
+            Playlist = new ObservableCollection<Playlist>();
         }
 
         // Метод срабатывающий при закрытии окна.
@@ -148,9 +203,14 @@ namespace ViewModels
         {
             GetAudiosFromWeb(TitleSongOrGroup);
 
-            Playlist = playlist.Select((a) => a.Name).ToArray();
+            foreach (var item in playlist.Select((a) => a.Name).ToArray())
+            {
+                Playlist.Add(new Playlist() { Title = item, IsCheck = false });
+            }
 
-            SelectAudioMethod(Playlist.First());
+            SelectAudioMethod(Playlist.First().Title);
+
+            Playlist = Playlist;
         }
 
         /// <summary>
@@ -162,21 +222,19 @@ namespace ViewModels
             {
                 NewPlaylist = playlist;
             }
+            else
+            {
+                foreach (var item in Playlist.Where((s) => s.IsCheck == true).Select(s => s.Title))
+                {
+                    NewPlaylist.Add(playlist.Single(s => s.Name == item));
+                }
+            }
             if (NewPlaylist.Count != 0)
             {
+                Result = true;
+
                 DisplayRootRegistry.ClosePresentation(this);
             }
-        }
-
-        /// <summary>
-        /// Метод добавляющий выбранную песню в плейлист.
-        /// </summary>
-        public void AddInPlaylistMethod(object param)
-        {
-            if (CurrentAudio != null)
-            {
-                NewPlaylist.Add(CurrentAudio);
-            } 
         }
 
         /// <summary>
@@ -208,9 +266,21 @@ namespace ViewModels
         /// </summary>
         public void SelectSongMethod(object param)
         {
+            if (param != null)
+            {
+                var item = (Playlist)param;
+
+                SelectAudioMethod(item.Title);
+            }
+        }
+
+        public void GetResultMethod(object param)
+        {
             if (param == null) throw new ArgumentNullException();
 
-            SelectAudioMethod(param.ToString());
+            Result = Convert.ToBoolean(param);
+
+            DisplayRootRegistry.ClosePresentation(this);
         }
 
         /// <summary>
@@ -251,6 +321,5 @@ namespace ViewModels
                playlist.Add(new Audio(path));
             }
         }
-
     }
 }

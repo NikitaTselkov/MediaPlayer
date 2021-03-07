@@ -38,6 +38,8 @@
 
                 <ResourceDictionary Source="Styles/AudioControls.xaml" />
 
+                <ResourceDictionary Source="Styles/AdditionalStyles.xaml" />
+
             </ResourceDictionary.MergedDictionaries>
 
         </ResourceDictionary>

@@ -22,10 +22,9 @@
         </StackPanel.Effect>
 
         <Label
+            Style="{StaticResource lableTitle}"
             Content="Подтвердить действие"
             HorizontalAlignment="Center"
-            FontSize="25"
-            Foreground="{StaticResource White}"
             Margin="10"
         />
 

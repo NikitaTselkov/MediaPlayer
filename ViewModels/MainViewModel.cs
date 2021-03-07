@@ -254,7 +254,7 @@ namespace ViewModels
 
             DisplayRootRegistry.ShowModalPresentation(newPlaylistViewModel);
 
-            if (newPlaylistViewModel.NewPlaylist.Count != 0)
+            if (newPlaylistViewModel.NewPlaylist.Count != 0 && newPlaylistViewModel.Result == true)
             {
                 var newPlaylist = new List<Audio>();
 

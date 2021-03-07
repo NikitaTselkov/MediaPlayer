@@ -51,11 +51,11 @@
 
         </StackPanel>
 
-        <StackPanel Grid.Column="1">
+        <Grid Grid.Column="1">
 
             <Viewbox HorizontalAlignment="Left" VerticalAlignment="Top">
 
-                <ListBox Style="{StaticResource songs}" ItemContainerStyle="{StaticResource songsItem}" SelectedItem="{Binding CurrentSongName, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" x:Name="SongsList" ItemsSource="{Binding Playlist}">
+                <ListBox MaxHeight="200" Style="{StaticResource songs}" ItemContainerStyle="{StaticResource songsItem}" SelectedItem="{Binding CurrentSongName, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" x:Name="SongsList" ItemsSource="{Binding Playlist}" ScrollViewer.VerticalScrollBarVisibility="Visible">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="SelectionChanged">
                             <i:InvokeCommandAction Command="{Binding SelectSong}" CommandParameter="{Binding ElementName=SongsList, Path=SelectedItem}"/>
@@ -65,7 +65,7 @@
 
             </Viewbox>
 
-        </StackPanel>
+        </Grid>
 
         <Grid Background="{StaticResource DarkBlue}" Grid.Row="2" Grid.Column="0">
 
@@ -169,97 +169,6 @@
             </Viewbox>
 
         </StackPanel>
-
-        <!--<StackPanel VerticalAlignment="Center">
-
-            <DockPanel HorizontalAlignment="Center">
-
-                <Button
-                    Command="{Binding Play}"
-                    Width="100"
-                    Height="50"
-                    Content="play"
-                    FontSize="25"
-                />
-
-                <Button
-                    Command="{Binding Stop}"
-                    Width="100"
-                    Height="50"
-                    Content="stop"
-                    FontSize="25"
-                />
-
-                <Button
-                    Command="{Binding Pause}"
-                    Width="100"
-                    Height="50"
-                    Content="pause"
-                    FontSize="25"
-                />
-
-                <CheckBox IsChecked="{Binding IsPlayNextSong}" />
-
-            </DockPanel>
-
-            <StackPanel Height="140">
-                <ListBox SelectedItem="{Binding CurrentSongName, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" x:Name="SongsList" Height="70" Background="Bisque" ItemsSource="{Binding Playlist}">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="SelectionChanged">
-                            <i:InvokeCommandAction Command="{Binding SelectSong}" CommandParameter="{Binding ElementName=SongsList, Path=SelectedItem}"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </ListBox>
-
-                <ListBox SelectedItem="{Binding CurrentPlaylistTitle, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" ItemsSource="{Binding Playlists}" Height="70" Background="DarkGoldenrod" x:Name="Playlists">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="SelectionChanged">
-                            <i:InvokeCommandAction Command="{Binding SelectPlaylist}" CommandParameter="{Binding ElementName=Playlists, Path=SelectedItem}"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </ListBox>
-            </StackPanel>
-
-            <Slider Minimum="0" Maximum="1.0"  Width="100" Margin="20" Value="{Binding Volume, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-
-            <Slider Margin="50" Minimum="0" Maximum="{Binding Duration}" Width="300" Value="{Binding Position, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="PreviewMouseDown">
-                        <i:InvokeCommandAction Command="{Binding Pause}"/>
-                    </i:EventTrigger>
-                    <i:EventTrigger EventName="PreviewMouseUp">
-                        <i:InvokeCommandAction Command="{Binding Play}"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </Slider>
-
-            <TextBox  Text="{Binding NewTitle}"/>
-
-            <Label Content="{Binding Position, UpdateSourceTrigger=PropertyChanged}" />
-            
-            <Label Content="{Binding CurrentSongName, UpdateSourceTrigger=PropertyChanged}" />
-
-            <DockPanel HorizontalAlignment="Center">
-
-                <Button x:Name="bt1" Height="30" Width="30" Margin="10" Content="back" Command="{Binding BackSong}" />
-
-                <Button Height="30" Width="30" Margin="10" Content="next" Command="{Binding NextSong}" />
         
-                
-                <Button Height="30" Width="70" Margin="10" Content="AddPlaylist" Command="{Binding AddPlaylist}" />
-                
-                <Button Height="30" Width="60" Margin="10" Content="AddMusic" Command="{Binding AddMusic}" />
-
-                <Button Height="30" Width="80" Margin="10" Content="RemoveMusic" Command="{Binding RemoveMusic}" />
-
-                <Button Height="30" Width="90" Margin="10" Content="RemovePlaylist" Command="{Binding RemovePlaylist}" />
-
-                <Button Height="30" Width="90" Margin="10" Content="Rename" Command="{Binding RenamePlaylist}" />
-
-            </DockPanel>
-
-
-        </StackPanel>-->
-
     </Grid>
 </Window>

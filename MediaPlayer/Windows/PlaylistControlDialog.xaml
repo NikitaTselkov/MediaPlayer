@@ -7,7 +7,11 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         mc:Ignorable="d"
         Title="PlaylistControlDialog"
-        Height="450"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        ResizeMode="NoResize"
+        Height="540"
         Width="800">
 
     <i:Interaction.Triggers>
@@ -16,65 +20,130 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
+    <Viewbox Margin="10">
+        <Viewbox.Effect>
+            <DropShadowEffect BlurRadius="15" ShadowDepth="0" Color="{StaticResource lightBlue}" />
+        </Viewbox.Effect>
 
-    <StackPanel Background="LemonChiffon" VerticalAlignment="Top" Margin="0 20 0 0">
+        <StackPanel Background="{StaticResource DarkBlue}" VerticalAlignment="Top">
 
-        <Label Content="название плейлиста" />
-        <TextBox Background="Lavender" Text="{Binding TitleNewPlaylist}" />
+            <Label Content="название плейлиста" Style="{StaticResource lableTitle}" />
+            <TextBox Style="{StaticResource textBox}" Text="{Binding TitleNewPlaylist}" />
 
-        <Label Content="название песни или группы" />
-        <TextBox Height="30" Background="Lavender" Text="{Binding TitleSongOrGroup}" />
-        <Button Height="30" Width="100" HorizontalAlignment="Left" Command="{Binding GetMusicFromWeb}" Content="Поиск" FontSize="20" />
-
-        <DockPanel>
-
-            <ListBox SelectedItem="{Binding CurrentSongName, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" ItemsSource="{Binding Playlist}" x:Name="SongsList"  Width="500" Height="200" Margin="5" HorizontalAlignment="Left">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="SelectionChanged">
-                        <i:InvokeCommandAction Command="{Binding SelectSong}" CommandParameter="{Binding ElementName=SongsList, Path=SelectedItem}"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </ListBox>
+            <Label Content="название песни или группы" Style="{StaticResource lableTitle}" />
+            <TextBox Style="{StaticResource textBox}" Height="30" Text="{Binding TitleSongOrGroup}" />
+            <Button Margin="5" Style="{StaticResource buttons}" Height="30" Width="100" HorizontalAlignment="Left" Command="{Binding GetMusicFromWeb}" Content="Поиск" FontSize="20" />
 
             <DockPanel>
 
-                <StackPanel>
+                <ListBox Style="{StaticResource songs}" BorderThickness="1" BorderBrush="{StaticResource Gray}" SelectedItem="{Binding CurrentSongName, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" ItemsSource="{Binding Playlist}" x:Name="SongsList"  Width="500" Height="200" Margin="5" HorizontalAlignment="Left">
 
-                    <CheckBox Content="Добавить все" IsChecked="{Binding IsSelectedAll}" />
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Background" Value="{StaticResource DarkBlue}" />
+                            <Setter Property="FontFamily" Value="MS Shell Dlg 2" />
+                            <Setter Property="FontSize" Value="13" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
 
-                    <Button Margin="30 10" Height="50" Width="100" HorizontalAlignment="Left" Content="Play" FontSize="25" Command="{Binding Play}" />
+                                        <Border Background="{TemplateBinding Background}" 
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                Width="{TemplateBinding Width}"
+                                                Height="{TemplateBinding Height}">
 
-                    <Button Margin="30 10" Height="50" Width="100" HorizontalAlignment="Left" Content="Add" FontSize="25" Command="{Binding Add}" />
+                                            <DockPanel Height="20">
 
-                    <Button Margin="30 10" Height="50" Width="100" HorizontalAlignment="Left" Content="Stop" FontSize="25" Command="{Binding Stop}" />
+                                                <Viewbox>
 
-                </StackPanel>
+                                                    <CheckBox
+                                                        IsChecked="{Binding Path=IsCheck}"
+                                                        HorizontalAlignment="Left"
+                                                        VerticalAlignment="Center"
+                                                        Style="{DynamicResource playlistsCheckBox}"
+                                                        Margin="{TemplateBinding Padding}"
+                                                        Foreground="{TemplateBinding Foreground}"
+                                                    />
 
-                <StackPanel VerticalAlignment="Center">
+                                                </Viewbox>
 
-                    <Label Content="Громкость" />
+                                                <ContentPresenter Content="{Binding Path=Title}"  Margin="-10 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Center" />
 
-                    <Slider Minimum="0" Maximum="1.0"  Width="100" Value="{Binding Volume, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                            </DockPanel>
 
-                    <Slider Margin="0 50" Minimum="0" Maximum="{Binding Duration}" Width="100" Value="{Binding Position, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="PreviewMouseDown">
-                                <i:InvokeCommandAction Command="{Binding Pause}"/>
-                            </i:EventTrigger>
-                            <i:EventTrigger EventName="PreviewMouseUp">
-                                <i:InvokeCommandAction Command="{Binding Play}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </Slider>
+                                        </Border>
 
-                </StackPanel>
-                
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="Foreground" Value="{StaticResource LightBlue}" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction Command="{Binding SelectSong}" CommandParameter="{Binding ElementName=SongsList, Path=SelectedItem}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ListBox>
+
+                <DockPanel>
+
+                    <StackPanel VerticalAlignment="Center">
+
+                        <Viewbox Width="150" Height="30">
+
+                            <CheckBox Style="{StaticResource playlistsCheckBox}" Foreground="{StaticResource White}" Content="Добавить все" IsChecked="{Binding IsSelectedAll}" />
+
+                        </Viewbox>
+
+                        <!--<Button Style="{StaticResource buttons}" Margin="30 10" Height="50" Width="100" HorizontalAlignment="Left" Content="Add All" FontSize="25" Command="{Binding Add}" />-->
+
+                        <Button Style="{StaticResource buttons}" Margin="30 10" Height="50" Width="100" HorizontalAlignment="Left" Content="Play" FontSize="25" Command="{Binding Play}" />
+
+                        <Button Style="{StaticResource buttons}" Margin="30 10" Height="50" Width="100" HorizontalAlignment="Left" Content="Stop" FontSize="25" Command="{Binding Stop}" />
+
+                    </StackPanel>
+
+                </DockPanel>
+
             </DockPanel>
 
-        </DockPanel>
+            <DockPanel HorizontalAlignment="Center">
 
-        <Button Height="50" Width="100" HorizontalAlignment="Left" Content="Create" FontSize="25" Command="{Binding CreateNewPlaylist}" />
+                <Slider Style="{StaticResource positionSlider}" VerticalAlignment="Center" Minimum="0" Maximum="{Binding Duration}" Value="{Binding Position, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="PreviewMouseDown">
+                            <i:InvokeCommandAction Command="{Binding Pause}"/>
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="PreviewMouseUp">
+                            <i:InvokeCommandAction Command="{Binding Play}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Slider>
 
-    </StackPanel>
-    
+                <Image Margin="20 0 10 0" Width="10" Height="10" Source="{StaticResource volumeIcon}" RenderOptions.BitmapScalingMode="HighQuality" />
+
+                <Slider Style="{StaticResource positionSlider}" Minimum="0" Maximum="1.0"  Width="100" Value="{Binding Volume, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+
+            </DockPanel>
+
+            <DockPanel>
+
+                <Button Margin="10" Style="{StaticResource buttons}" Height="50" Width="100" HorizontalAlignment="Left" Content="Create" FontSize="25" Command="{Binding CreateNewPlaylist}" />
+
+                <Button Margin="10" Style="{StaticResource buttons}" Height="50" Width="100" HorizontalAlignment="Left" Content="Close" FontSize="25" Command="{Binding GetResult}" CommandParameter="{Binding Result}" />
+
+            </DockPanel>
+
+        </StackPanel>
+
+    </Viewbox>
+
 </Window>
